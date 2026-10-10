@@ -12,7 +12,8 @@ from common import print_header, print_table
 
 def main() -> None:
     print_header("Chapter 7: 決定木・ランダムフォレスト")
-    print("決定木は分岐ルールを学習します。ランダムフォレストは複数の木を組み合わせて安定させます。")
+    print("決定木は『この数値は大きい？』と質問をたどって判断する仕組みです。")
+    print("ランダムフォレストは、違いのある複数の木の予測を組み合わせます。")
 
     data = load_breast_cancer(as_frame=True)
     X = data.data
@@ -22,6 +23,7 @@ def main() -> None:
         X, y, test_size=0.25, random_state=42, stratify=y
     )
 
+    # 同じ確認用データで、1本の木と100本の木を比べる。
     models = {
         "DecisionTree": DecisionTreeClassifier(max_depth=4, random_state=42),
         "RandomForest": RandomForestClassifier(
@@ -52,6 +54,7 @@ def main() -> None:
     print("\nRandomForest の重要特徴量 top 5:")
     for feature, value in importances.head(5).items():
         print(f"  {feature}: {value:.4f}")
+    print("\n重要度は、木の分岐でどの手がかりが使われたかの目安です。原因を示す値ではありません。")
 
 
 if __name__ == "__main__":

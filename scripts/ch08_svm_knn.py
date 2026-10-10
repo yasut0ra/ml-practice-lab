@@ -14,7 +14,9 @@ from common import print_header, print_table
 def main() -> None:
     print_header("Chapter 8: SVM と k-NN")
     print("SVM は境界をうまく引くモデル、k-NN は近いデータの多数決で分類するモデルです。")
+    print("ここでは、手書き数字の画像から0〜9のどの数字かを当てます。")
 
+    # 画像1枚を、8×8 = 64個の明るさの数値として使う。
     data = load_digits()
     X = data.data
     y = data.target
@@ -46,6 +48,8 @@ def main() -> None:
 
     print_table(rows, ["model", "accuracy"])
     print(f"画像データの形: {data.images.shape} (枚数, 高さ, 幅)")
+    print(f"モデルに渡す表の形: {X.shape}（枚数, ピクセルの数）")
+    print("accuracy は確認用の画像での正解率です。0.98なら約98%が正解です。")
 
 
 if __name__ == "__main__":

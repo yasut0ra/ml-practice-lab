@@ -3,7 +3,7 @@ SHELL := /bin/bash
 PYTHON ?= .venv/bin/python
 PIP ?= .venv/bin/pip
 
-.PHONY: setup run check answers clean
+.PHONY: setup run check answers visuals clean
 
 setup:
 	python3 -m venv .venv
@@ -22,6 +22,9 @@ answers:
 		echo "== $$file =="; \
 		$(PYTHON) $$file; \
 	done
+
+visuals:
+	$(PYTHON) scripts/visualize.py
 
 clean:
 	rm -rf .venv __pycache__ scripts/__pycache__ answers/__pycache__ .pytest_cache outputs
