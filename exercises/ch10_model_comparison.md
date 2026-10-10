@@ -10,9 +10,9 @@
 4人の実力を比べるのに、1人だけ簡単な問題を解いたら公平に比べられません。
 モデルも、同じデータ・同じ分け方・同じ採点方法で比べます。
 
-![同じデータと5回の分割を使い、4種類のモデルを同じ指標で評価し、平均とばらつきを比較する](../docs/images/model-comparison.svg)
+![学習用の中の同じ5回の分割で、単純な基準と4種類のモデルを同じ指標で比較し、最後に別のテストで確かめる](../docs/images/model-comparison.svg)
 
-この章では、診断データで LogisticRegression・RandomForest・SVM・k-NN を比べます。
+この章では、診断データで LogisticRegression・RandomForest・SVM・k-NN と、最多の種類を答える単純な基準を比べます。
 4つのモデルの名前や設定を全部暗記する必要はありません。まずは比較表を読んでください。
 
 ## 実行
@@ -25,11 +25,15 @@
 
 | コード | していること |
 | --- | --- |
-| `models = {...}` | 比べたい4つのモデルを名前と一緒に用意する |
+| `models = build_models()` | 単純な基準と4つのモデルを、名前と一緒に用意する |
+| `train_test_split(...)` | 最終テストを先に取っておく |
 | `StratifiedKFold(..., random_state=42)` | 全モデルに共通の分け方を決める |
 | `cross_validate(..., scoring={...})` | 同じ5回の分割で、複数の指標を測る |
 | `scores["test_f1"].mean()` | 5回の F1 の平均を求める |
-| `sort_values("f1_mean", ascending=False)` | F1 の平均が高い順に表を並べる |
+| `sort_values(["f1_mean", "model"], ...)` | F1の平均が高い順、同率なら名前の順で並べる |
+
+`models` は `build_models()` が用意します。CVは `X_train, y_train` の中だけで行います。
+F1が同率ならモデル名の順で決めます。選んだモデルを学習用すべてで学び直し、最終テストで1回確認します。
 
 ## 結果の見方
 
@@ -43,7 +47,8 @@
 
 一番上のモデルは、**今回のデータと条件で、F1 の平均が最も高かったモデル**です。
 すべての用途で一番という意味ではありません。差が小さければ、ばらつきや計算時間なども考えます。
-ここでの CV は候補の比較です。実際にモデルを選んで使う際は、第5章のように別のテストデータを取っておき、最後に評価します。
+CVの比較表は候補を選ぶための成績です。その下の「最終テスト」は、選んだ1つのモデルを別のデータで確かめた成績です。
+両者を区別して読み、最終テストを見て選び直さないようにします。
 
 ## まずはここだけ
 
@@ -59,12 +64,30 @@
 ## ヒント
 
 ```python
-scores = cross_validate(model, X, y, scoring={"accuracy": "accuracy", "f1": "f1", "recall": "recall"})
+scores = cross_validate(model, X_train, y_train, cv=cv,
+                        scoring={"accuracy": "accuracy", "f1": "f1", "recall": "recall"})
 from pathlib import Path
 
 Path("outputs").mkdir(exist_ok=True)
 result.to_csv("outputs/model_comparison.csv", index=False)
 ```
+
+## つまずいたとき
+
+<details>
+<summary>最終テストのほうが良かったモデルに、選び直してもいい？</summary>
+
+選び直すと、そのテストもモデル選びに使ったことになります。
+比較は学習用のCVで行い、最終テストは決めた1モデルの確認に残します。
+CSVの保存では、保存先のフォルダを先に作ったかも確認してください。
+
+</details>
+
+## この章のゴール
+
+- [ ] 単純な基準を含め、同じ問題・指標で候補を比べられる。
+- [ ] CVで選んだモデルだけを、最終テストで確かめられる。
+- [ ] 今回の結果から言えることを、条件とともに1文で書ける。
 
 <details>
 <summary>理解の確認：片方だけ別のデータ分割で、精度が高ければ優秀？</summary>
@@ -74,4 +97,4 @@ result.to_csv("outputs/model_comparison.csv", index=False)
 
 </details>
 
-[解答例](../answers/ch10_answer.py) · [前の章](ch09_clustering.md) · [用語早見表](../cheatsheet.md) · [教材の入口](../README.md)
+[解答例](../answers/ch10_answer.py) · [総合課題へ](../docs/capstone.md) · [前の章](ch09_clustering.md) · [用語早見表](../cheatsheet.md) · [教材の入口](../README.md)

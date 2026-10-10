@@ -14,14 +14,13 @@ run:
 	$(PYTHON) scripts/run_all.py
 
 check:
-	$(PYTHON) -m compileall scripts answers
-	$(PYTHON) scripts/run_all.py --fast
+	$(PYTHON) -m compileall -q scripts answers tests
+	$(PYTHON) scripts/check_materials.py
+	$(PYTHON) -m unittest discover -s tests -v
+	$(PYTHON) scripts/run_all.py
 
 answers:
-	for file in answers/*.py; do \
-		echo "== $$file =="; \
-		$(PYTHON) $$file; \
-	done
+	$(PYTHON) scripts/run_all.py --answers
 
 visuals:
 	$(PYTHON) scripts/visualize.py

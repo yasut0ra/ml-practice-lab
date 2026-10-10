@@ -65,7 +65,15 @@ def main() -> None:
         }
     )
 
+    # 問3: k-NNでも、同じk=5のまま標準化の有無だけを比べる。
+    no_scale_knn = KNeighborsClassifier(n_neighbors=5)
+    no_scale_knn.fit(X_train, y_train)
+    rows.append({"model": "k-NN no scale", "accuracy":
+                 f"{accuracy_score(y_test, no_scale_knn.predict(X_test)):.4f}"})
+
     print_table(rows, ["model", "accuracy"])
+    print("SVM C=3とSVM no scale、k-NN k=5とk-NN no scaleを対応させて比べます。")
+    print("画素は同じ単位です。標準化したほうが必ず正解率が上がるわけではありません。")
 
 
 if __name__ == "__main__":

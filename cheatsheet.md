@@ -21,6 +21,7 @@
 | `max_iter` | 計算の繰り返し回数の上限。データの件数ではない |
 | 過学習 | 練習した例に合わせすぎて、新しい例でうまくいかないこと |
 | データ漏洩 | 確認用の情報を、学習や設定選びに先に使ってしまうこと |
+| ベースライン | 複雑なモデルと比べるための、単純な予想の基準 |
 
 ## 基本の流れ
 
@@ -149,6 +150,23 @@ model = Pipeline(
 | SVM | 小〜中規模データで強い | スケーリングが重要 |
 | k-NN | 直感的で簡単 | データ数が増えると遅い |
 | KMeans | クラスタリングの基準 | クラスタ数を指定する必要がある |
+
+## モデルより先に、単純な基準を作る
+
+回帰なら「学習用の答えの平均をいつも答える」、分類なら「学習用で最も多い種類をいつも答える」と比べます。
+複雑なモデルの数値だけでは、良い予想か判断しにくいためです。
+
+```python
+from sklearn.dummy import DummyRegressor, DummyClassifier
+
+regression_baseline = DummyRegressor(strategy="mean")
+classification_baseline = DummyClassifier(strategy="most_frequent")
+```
+
+基準も学習用だけで `fit` し、同じ確認用で評価します。[第2章](exercises/ch02_regression.md)と[第3章](exercises/ch03_classification.md)に実行例があります。
+R2の説明でいう「いつも平均を答える方法」は評価対象の答えの平均を使う数学上の基準です。
+DummyRegressorの予測は学習用の平均なので、テストでのR2がちょうど0になるとは限りません。
+詳しくは[単純な基準の公式説明](https://scikit-learn.org/stable/modules/model_evaluation.html#dummy-estimators)を参照してください。
 
 ## もう少し詳しく知りたいとき
 

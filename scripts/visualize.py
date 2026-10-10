@@ -1,4 +1,4 @@
-"""実際のデータを6枚の図にする。実行: .venv/bin/python scripts/visualize.py"""
+"""実際のデータを8枚の図にする。実行: .venv/bin/python scripts/visualize.py"""
 
 from __future__ import annotations
 
@@ -15,11 +15,15 @@ from matplotlib import font_manager
 from matplotlib.patches import Patch, Rectangle
 import numpy as np
 from sklearn.cluster import KMeans
-from sklearn.datasets import load_breast_cancer, load_diabetes, load_digits, load_iris, make_blobs
+from sklearn.datasets import load_breast_cancer, load_diabetes, load_digits, load_iris, make_blobs, make_moons
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.pipeline import make_pipeline
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
 
 from ch05_split_cv import build_model
 
@@ -195,8 +199,92 @@ def clustering() -> plt.Figure:
     return fig
 
 
+def overfitting() -> plt.Figure:
+    """ノイズのある人工データで、細かい分岐と学習・検証の成績を比べる。"""
+    X, y = make_moons(n_samples=220, noise=0.3, random_state=42)
+    X_train, X_valid, y_train, y_valid = train_test_split(
+        X, y, test_size=0.35, random_state=42, stratify=y
+    )
+    x_grid, y_grid = np.meshgrid(
+        np.linspace(X[:, 0].min() - 0.2, X[:, 0].max() + 0.2, 160),
+        np.linspace(X[:, 1].min() - 0.2, X[:, 1].max() + 0.2, 160),
+    )
+    grid = np.column_stack([x_grid.ravel(), y_grid.ravel()])
+    fig = plt.figure(figsize=(11, 8), layout="constrained")
+    panels = fig.add_gridspec(2, 3)
+    for column, depth in enumerate([1, 3, None]):
+        ax = fig.add_subplot(panels[0, column])
+        model = DecisionTreeClassifier(max_depth=depth, random_state=42).fit(X_train, y_train)
+        regions = model.predict(grid).reshape(x_grid.shape)
+        ax.contourf(x_grid, y_grid, regions, levels=[-0.5, 0.5, 1.5], colors=COLORS[:2], alpha=0.15)
+        for group in [0, 1]:
+            selected = y_train == group
+            ax.scatter(X_train[selected, 0], X_train[selected, 1], s=20,
+                       color=COLORS[group], marker=MARKERS[group], label=caption(f"種類{group}", f"Class {group}"))
+        depth_label = caption("上限なし", "Unlimited") if depth is None else str(depth)
+        ax.set(title=caption(f"質問の深さ：{depth_label}", f"Tree depth: {depth_label}"),
+               xlabel=caption("手がかり1", "Feature 1"), ylabel=caption("手がかり2", "Feature 2"))
+        if column == 0:
+            ax.legend(fontsize=10)
+
+    depths = list(range(1, 11)) + [None]
+    training_scores, validation_scores = [], []
+    for depth in depths:
+        model = DecisionTreeClassifier(max_depth=depth, random_state=42).fit(X_train, y_train)
+        training_scores.append(model.score(X_train, y_train))
+        validation_scores.append(model.score(X_valid, y_valid))
+    ax = fig.add_subplot(panels[1, :])
+    ax.plot(range(len(depths)), training_scores, marker="o", color=COLORS[0],
+            label=caption("学習用の正解率", "Training accuracy"))
+    ax.plot(range(len(depths)), validation_scores, marker="s", color=COLORS[2],
+            label=caption("検証用の正解率", "Validation accuracy"))
+    ax.set(xticks=range(len(depths)), xticklabels=[str(d) if d else caption("上限なし", "None") for d in depths],
+           xlabel=caption("質問の深さ", "Tree depth"), ylabel=caption("正解率", "Accuracy"), ylim=(0, 1.05))
+    ax.legend(loc="lower right")
+    fig.suptitle(caption("過学習：練習した例で満点でも、別の例では？",
+                         "Overfitting: perfect training answers do not guarantee new answers"))
+    return fig
+
+
+def decision_boundaries() -> plt.Figure:
+    """花びらの2特徴量で、SVMとk-NNが学ぶ境界を同じデータ上で見る。"""
+    data = load_iris()
+    X, y = data.data[:, 2:4], data.target
+    X_train, X_valid, y_train, y_valid = train_test_split(
+        X, y, test_size=0.2, random_state=42, stratify=y
+    )
+    x_grid, y_grid = np.meshgrid(
+        np.linspace(X[:, 0].min() - 0.3, X[:, 0].max() + 0.3, 160),
+        np.linspace(X[:, 1].min() - 0.2, X[:, 1].max() + 0.2, 160),
+    )
+    grid = np.column_stack([x_grid.ravel(), y_grid.ravel()])
+    models = [make_pipeline(StandardScaler(), SVC(kernel="linear", C=1)),
+              make_pipeline(StandardScaler(), KNeighborsClassifier(n_neighbors=5))]
+    fig, axes = plt.subplots(1, 2, figsize=(11, 5), sharex=True, sharey=True, layout="constrained")
+    for ax, name, model in zip(axes, ["SVM (linear)", "k-NN (k=5)"], models):
+        model.fit(X_train, y_train)
+        regions = model.predict(grid).reshape(x_grid.shape)
+        ax.contourf(x_grid, y_grid, regions, levels=[-0.5, 0.5, 1.5, 2.5], colors=COLORS, alpha=0.14)
+        ax.contour(x_grid, y_grid, regions, levels=[0.5, 1.5], colors="#53708d", linewidths=0.8)
+        for group, variety in enumerate(data.target_names):
+            selected = y_train == group
+            ax.scatter(X_train[selected, 0], X_train[selected, 1], color=COLORS[group],
+                       marker=MARKERS[group], s=22, alpha=0.7, label=variety)
+            selected = y_valid == group
+            ax.scatter(X_valid[selected, 0], X_valid[selected, 1], color=COLORS[group],
+                       marker=MARKERS[group], s=65, edgecolor="#19324d", linewidth=1.2)
+        accuracy = model.score(X_valid, y_valid)
+        ax.set_title(name + caption(f" / 確認用 {accuracy:.1%}", f" / Validation {accuracy:.1%}"))
+        ax.set_xlabel(caption("花びらの長さ（cm）", "Petal length (cm)"))
+    axes[0].set_ylabel(caption("花びらの幅（cm）", "Petal width (cm)"))
+    axes[0].legend(title=caption("点の色・形：本当の品種", "Color and shape: actual variety"), fontsize=9)
+    fig.suptitle(caption("分類の境界を見る：大きな枠付きの点が確認用",
+                         "Classification boundaries: large outlined points are validation data"))
+    return fig
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="教材のデータを6枚のPNGグラフにして保存します。")
+    parser = argparse.ArgumentParser(description="教材のデータを8枚のPNGグラフにして保存します。")
     parser.add_argument("--output-dir", type=Path,
                         default=Path(__file__).resolve().parents[1] / "outputs" / "figures",
                         help="画像の保存先（既定: 教材フォルダの outputs/figures）")
@@ -211,6 +299,8 @@ def main() -> None:
         ("04_cross_validation.png", cross_validation),
         ("05_digits.png", digits),
         ("06_clustering.png", clustering),
+        ("07_overfitting.png", overfitting),
+        ("08_decision_boundaries.png", decision_boundaries),
     ]
     for filename, draw in figures:
         fig = draw()

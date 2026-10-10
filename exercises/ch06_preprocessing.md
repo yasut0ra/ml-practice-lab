@@ -65,6 +65,23 @@ model.predict_proba(new_customer)[:, 1]
 model.named_steps["preprocess"].get_feature_names_out()
 ```
 
+## つまずいたとき
+
+<details>
+<summary>新しい顧客データの形がわからない／補完方法を変えても正解率が同じ</summary>
+
+新しい入力は `pd.DataFrame([{"age": 46, "income": 640, "city": "Tokyo", "plan": "standard"}])` のように、同じ名前の4列を持つ1行の表にします。
+medianとmeanは同じ分割で比べます。確認用は4件だけなので、正解率が同じでも不思議ではありません。
+新しい顧客の予測確率や、学習した補完の値も確認すると、違いを詳しく見られます。
+
+</details>
+
+## この章のゴール
+
+- [ ] 数値と文字の列にする処理の違いを言える。
+- [ ] 元のデータと同じ列名で、新しい1行を作れる。
+- [ ] 空欄を埋める基準を学習用だけから求める理由を説明できる。
+
 <details>
 <summary>理解の確認：標準化すると、どんな数値も0〜1になる？</summary>
 

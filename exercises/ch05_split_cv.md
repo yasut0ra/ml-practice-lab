@@ -66,6 +66,22 @@
 cross_val_score(model, X, y, cv=cv, scoring="f1")
 ```
 
+## つまずいたとき
+
+<details>
+<summary>cv scoresとholdout accuracyは、どちらでモデルを選ぶ？</summary>
+
+学習用のCVでモデルや設定を比べます。holdoutは最後に1回確認するために残します。
+`cross_val_score` が `X_train, y_train` を受け取り、最終テストの `X_test, y_test` を受け取っていないかを見てください。
+
+</details>
+
+## この章のゴール
+
+- [ ] CVの各回でどの部分を学習・検証に使うか示せる。
+- [ ] 分割数とcv scoresの個数が同じことを確認できる。
+- [ ] 最終テストを設定選びに使わない理由を説明できる。
+
 <details>
 <summary>理解の確認：5回の検証では、同じモデルを学習し続ける？</summary>
 
