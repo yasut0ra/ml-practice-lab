@@ -1,18 +1,48 @@
 # scikit-learn Cheatsheet
 
+迷ったときに「この言葉・この行は何をしている？」を確認するページです。
+初めてなら[はじめてのガイド](docs/getting-started.md)から読んでください。
+
+## 用語を日本語で読む
+
+| コード・用語 | かんたんな意味 |
+| --- | --- |
+| `X` / 特徴量 | 予想の手がかりの表。行は1件、列は1種類の手がかり |
+| `y` / 目的変数 | 当てたい答え。`X` と同じ行が対応する |
+| `model` / モデル | 例から学んで予想する仕組み |
+| `fit` / 学習 | 入力と答えから規則を見つける |
+| `predict` / 予測 | 入力から答えを予想する |
+| `train` | 学習に使うデータ |
+| `test` | 最後に実力を確かめるためのデータ |
+| `validation` | モデルや設定を選ぶ途中で確認するためのデータ |
+| `pred` | モデルが出した予測値 |
+| `random_state=42` | 乱数の出発点を固定する。42自体に特別な意味はない |
+| `stratify=y` | 学習用と確認用のクラスの割合を近くする |
+| `max_iter` | 計算の繰り返し回数の上限。データの件数ではない |
+| 過学習 | 練習した例に合わせすぎて、新しい例でうまくいかないこと |
+| データ漏洩 | 確認用の情報を、学習や設定選びに先に使ってしまうこと |
+
 ## 基本の流れ
 
+以下は、そのまま実行できる分類の最小例です。
+
 ```python
+from sklearn.datasets import load_iris
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 
+X, y = load_iris(return_X_y=True)  # 手がかりと答えを用意する
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
+    X, y, test_size=0.2, random_state=42, stratify=y
 )
 
-model.fit(X_train, y_train)
-pred = model.predict(X_test)
-print(accuracy_score(y_test, pred))
+model = make_pipeline(StandardScaler(), LogisticRegression(max_iter=1000))
+model.fit(X_train, y_train)  # 学習用で学ぶ
+pred = model.predict(X_test)  # 確認用の入力だけで予想する
+print(accuracy_score(y_test, pred))  # 取っておいた答えと比べる
 ```
 
 ## よく使う import
@@ -50,14 +80,18 @@ from sklearn.cluster import KMeans
 
 | タスク | 指標 | 意味 |
 | --- | --- | --- |
-| 回帰 | MAE | 誤差の絶対値の平均 |
-| 回帰 | RMSE | 大きい誤差を重く見る |
-| 回帰 | R2 | 1 に近いほど説明できている |
-| 分類 | accuracy | 全体の正解率 |
+| 回帰 | MAE | ずれの大きさの平均。小さいほど良い |
+| 回帰 | RMSE | 大きいずれを重く見る。小さいほど良い |
+| 回帰 | R2 | 1に近いほど良い。0は平均を答えるのと同程度で、負にもなる |
+| 分類 | accuracy | 全体の正解率。0.9なら90% |
 | 分類 | precision | 陽性と予測した中で本当に陽性の割合 |
 | 分類 | recall | 本当の陽性をどれだけ拾えたか |
-| 分類 | F1 | precision と recall のバランス |
-| クラスタリング | silhouette | クラスタのまとまりと分離の良さ |
+| 分類 | F1 | precision と recall の調和平均。高いほど良い |
+| 分類 | ROC-AUC | 陽性を陰性より高いスコアにする力。1に近いほど良く、ランダムなら約0.5 |
+| クラスタリング | silhouette | 同じグループで近く、別グループから離れているか。-1〜1 |
+
+「陽性」は見つけたい対象です。[第4章の4マスの図](exercises/ch04_metrics.md)で、
+precision と recall の分母が違うことを確認できます。
 
 ## train/test split
 
@@ -73,16 +107,23 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 ## cross validation
 
+確認する部分を入れ替えて、毎回新しく学習します。[第5章の図解](exercises/ch05_split_cv.md)も参照してください。
+モデルや設定を比べるときは、最終テストを取っておき、学習用の中で CV を行います。
+以下は上の例の続きです。
+
 ```python
 from sklearn.model_selection import cross_val_score
 
-scores = cross_val_score(model, X, y, cv=5, scoring="accuracy")
+scores = cross_val_score(model, X_train, y_train, cv=5, scoring="accuracy")
 print(scores.mean(), scores.std())
 ```
 
 ## Pipeline
 
-前処理とモデルをまとめると、train/test split や cross validation でデータ漏洩を避けやすくなります。
+**前処理 → モデル**の順番をひとまとめにする仕組みです。
+`fit(X_train, y_train)` なら、平均などの前処理の基準も学習用だけから求めます。
+`predict(X_test)` では、その基準を使って変換してから予想します。
+前処理を学習用と確認用で混ぜないためにも役立ちます。
 
 ```python
 from sklearn.pipeline import Pipeline
@@ -108,3 +149,11 @@ model = Pipeline(
 | SVM | 小〜中規模データで強い | スケーリングが重要 |
 | k-NN | 直感的で簡単 | データ数が増えると遅い |
 | KMeans | クラスタリングの基準 | クラスタ数を指定する必要がある |
+
+## もう少し詳しく知りたいとき
+
+英語ですが、次は scikit-learn の公式説明です。
+
+- [学習用とテスト用の分割・交差検証](https://scikit-learn.org/stable/modules/cross_validation.html)
+- [評価指標の定義](https://scikit-learn.org/stable/modules/model_evaluation.html)
+- [前処理とデータ漏洩でよくある間違い](https://scikit-learn.org/stable/common_pitfalls.html)

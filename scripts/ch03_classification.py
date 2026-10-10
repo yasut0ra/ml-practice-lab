@@ -12,16 +12,19 @@ from common import print_header
 
 def main() -> None:
     print_header("Chapter 3: 分類")
-    print("分類は、カテゴリやラベルを予測する教師あり学習です。Iris の品種を予測します。")
+    print("分類は『どの種類？』を当てる方法です。花の測定値から、3種類の品種を当てます。")
 
+    # 1. 花の測定値 X と、品種の番号 y を取り出す。
     data = load_iris(as_frame=True)
     X = data.data
     y = data.target
 
+    # 2. 品種の割合を保ちながら、学習用と確認用に分ける。
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42, stratify=y
     )
 
+    # 3. 数値の尺度をそろえる処理と、分類モデルをまとめて学ぶ。
     model = Pipeline(
         steps=[
             ("scale", StandardScaler()),
@@ -32,11 +35,12 @@ def main() -> None:
     pred = model.predict(X_test)
 
     print(f"accuracy: {accuracy_score(y_test, pred):.4f}")
+    print(f"正解率: {accuracy_score(y_test, pred):.1%}（確認用の{len(y_test)}件全体での割合）")
     print("予測例:")
     for i in range(5):
         actual = data.target_names[y_test.iloc[i]]
         predicted = data.target_names[pred[i]]
-        print(f"  actual={actual}, predicted={predicted}")
+        print(f"  actual（本当）={actual}, predicted（予想）={predicted}")
 
 
 if __name__ == "__main__":

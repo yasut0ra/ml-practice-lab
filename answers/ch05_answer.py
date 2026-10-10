@@ -8,7 +8,7 @@ sys.path.append(str(Path(__file__).resolve().parents[1] / "scripts"))
 from common import print_header, print_table
 from sklearn.datasets import load_breast_cancer
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import StratifiedKFold, cross_val_score
+from sklearn.model_selection import StratifiedKFold, cross_val_score, train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
@@ -29,11 +29,16 @@ def main() -> None:
     X = data.data
     y = (data.target == 0).astype(int)
 
+    # 第5章と同じく、最終テストはCVの比較には使わない。
+    X_train, _, y_train, _ = train_test_split(
+        X, y, test_size=0.25, random_state=42, stratify=y
+    )
+
     rows = []
     for n_splits in [3, 5, 10]:
         cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=42)
         for scoring in ["accuracy", "f1"]:
-            scores = cross_val_score(build_model(), X, y, cv=cv, scoring=scoring)
+            scores = cross_val_score(build_model(), X_train, y_train, cv=cv, scoring=scoring)
             rows.append(
                 {
                     "cv": n_splits,

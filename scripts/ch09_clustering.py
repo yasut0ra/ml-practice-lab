@@ -10,8 +10,9 @@ from common import print_header
 
 def main() -> None:
     print_header("Chapter 9: クラスタリング")
-    print("クラスタリングは正解ラベルなしで、似たデータをグループに分ける教師なし学習です。")
+    print("クラスタリングは、答えを教えずに似たデータを集める方法です。")
 
+    # 元のグループ番号は結果確認に使うだけで、モデルには渡さない。
     X, true_labels = make_blobs(
         n_samples=300,
         centers=3,
@@ -28,6 +29,8 @@ def main() -> None:
     print("cluster centers:")
     for i, center in enumerate(model.cluster_centers_):
         print(f"  cluster {i}: [{center[0]:.3f}, {center[1]:.3f}]")
+    print("silhouette はまとまりと離れ方の目安です。高いほど、その観点では良い分け方です。")
+    print("グループ番号に順位はありません。中心の値は標準化した後の座標です。")
 
 
 if __name__ == "__main__":

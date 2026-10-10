@@ -16,6 +16,7 @@ from common import print_header
 def main() -> None:
     print_header("Chapter 10: 簡単なモデル比較")
     print("同じデータ、同じ分割方法、同じ評価指標で複数モデルを比較します。")
+    print("同じ問題を、同じ採点方法で比べると考えてください。")
 
     data = load_breast_cancer(as_frame=True)
     X = data.data
@@ -45,6 +46,7 @@ def main() -> None:
         ),
     }
 
+    # どのモデルでも同じ5回の分割を使い、平均とばらつきを比べる。
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
     rows = []
     for name, model in models.items():
@@ -67,6 +69,8 @@ def main() -> None:
 
     result = pd.DataFrame(rows).sort_values("f1_mean", ascending=False)
     print(result.to_string(index=False, float_format=lambda x: f"{x:.4f}"))
+    print("\nmean は5回の平均、std はばらつきです。F1 の平均が高い順に並べています。")
+    print("一番上は、今回のデータと条件で良かったモデルです。すべての用途で一番とは限りません。")
 
 
 if __name__ == "__main__":

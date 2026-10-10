@@ -62,8 +62,9 @@ def make_customer_data() -> tuple[pd.DataFrame, pd.Series]:
 
 def main() -> None:
     print_header("Chapter 6: 前処理")
-    print("欠損値、数値特徴量の標準化、カテゴリ特徴量の one-hot encoding を Pipeline でまとめます。")
+    print("空欄を埋め、数値の尺度をそろえ、文字の種類を0と1の列に変換します。")
 
+    # 1. 数値の列と、文字の列で別々の準備をする。
     X, y = make_customer_data()
     numeric_features = ["age", "income"]
     categorical_features = ["city", "plan"]
@@ -87,6 +88,7 @@ def main() -> None:
         ]
     )
 
+    # 2. データを整える手順と、予想するモデルをひとまとめにする。
     model = Pipeline(
         steps=[
             ("preprocess", preprocessor),
@@ -94,6 +96,7 @@ def main() -> None:
         ]
     )
 
+    # 3. 分割してから学ぶ。空欄を埋める値なども学習用だけで決まる。
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.25, random_state=42, stratify=y
     )
@@ -104,6 +107,8 @@ def main() -> None:
     print("変換前の列:", list(X.columns))
     transformed = model.named_steps["preprocess"].transform(X.head(3))
     print("変換後の特徴量数:", transformed.shape[1])
+    print("都市やプランが種類ごとの列に分かれたため、列数が増えました。")
+    print(f"確認用は{len(y_test)}件だけです。正解率より、変換の流れを見てみましょう。")
 
 
 if __name__ == "__main__":
