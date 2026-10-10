@@ -126,6 +126,6 @@ CVの採点名は `neg_mean_absolute_error` です。scikit-learnが「大きい
 
 </details>
 
-[解答例](../answers/ch13_answer.py) · [前の章](ch12_pca.md) · [総合課題](../docs/capstone.md) · [データの作り方](../datasets/README.md#第13章の架空の家賃csv) · [教材の入口](../README.md)
+[解答例](../answers/ch13_answer.py) · [前の章](ch12_pca.md) · [次の章：学習曲線](ch14_learning_curves.md) · [家賃の手がかりを調べる](ch16_feature_importance.md) · [総合課題](../docs/capstone.md) · [データの作り方](../datasets/README.md#第13章の架空の家賃csv) · [教材の入口](../README.md)
 
 読み込みの詳しい仕様は[pandas.read_csvの公式説明](https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html)を参照してください。

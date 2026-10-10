@@ -1,4 +1,4 @@
-"""実際のデータを11枚の図にする。実行: .venv/bin/python scripts/visualize.py"""
+"""実際のデータを14枚の図にする。実行: .venv/bin/python scripts/visualize.py"""
 
 from __future__ import annotations
 
@@ -29,6 +29,9 @@ from ch05_split_cv import build_model
 from ch11_parameter_search import build_search, comparison_table
 from ch12_pca import build_projection
 from ch13_csv_regression import FEATURES, TARGET, build_model as build_rent_model, load_rent_data
+from ch14_learning_curves import curve_table, make_practice_data
+from ch15_imbalanced_classification import build_model as build_inspection_model, split_inspection_data, threshold_table
+from ch16_feature_importance import importance_table, split_rooms
 
 
 COLORS = ["#2765a1", "#28806b", "#b06a20"]
@@ -372,8 +375,78 @@ def csv_predictions() -> plt.Figure:
     return fig
 
 
+def learning_curves() -> plt.Figure:
+    """第14章の学習件数ごとの成績。最終テストは含めない。"""
+    X, y = make_practice_data()
+    X_train, _, y_train, _ = train_test_split(X, y, test_size=0.25, random_state=42, stratify=y)
+    result = curve_table(DecisionTreeClassifier(max_depth=None, random_state=42), X_train, y_train)
+    sizes = result["学習件数"].to_numpy()
+    validation = result["検証用の平均"].to_numpy()
+    spread = result["検証用のばらつき"].to_numpy()
+    fig, ax = plt.subplots(figsize=(9, 5), layout="constrained")
+    ax.plot(sizes, result["学習用の平均"], marker="o", color=COLORS[0],
+            label=caption("学習用の正解率", "Training accuracy"))
+    ax.plot(sizes, validation, marker="s", color=COLORS[2],
+            label=caption("検証用の正解率", "Validation accuracy"))
+    ax.fill_between(sizes, validation - spread, validation + spread, color=COLORS[2], alpha=0.14,
+                    label=caption("検証用の平均 ± 標準偏差", "Validation mean +/- one standard deviation"))
+    ax.set(xticks=sizes, ylim=(0.6, 1.04),
+           xlabel=caption("1回のCVで学ぶ件数", "Training examples per CV fold"),
+           ylabel=caption("正解率（5回の平均）", "Accuracy (mean of five folds)"),
+           title=caption("学習曲線：同じ設定の木で、使う例を増やす", "Learning curves: more examples for the same unrestricted tree"))
+    ax.legend(loc="lower right", fontsize=10)
+    ax.grid(alpha=0.2)
+    return fig
+
+
+def imbalanced_classification() -> plt.Figure:
+    """第15章の検証用のクラス件数と、しきい値別の指標。"""
+    X_train, X_valid, _, y_train, y_valid, _ = split_inspection_data()
+    model = build_inspection_model().fit(X_train, y_train)
+    result = threshold_table(y_valid, model.predict_proba(X_valid)[:, 1],
+                             thresholds=np.linspace(0.05, 0.95, 19))
+    fig, axes = plt.subplots(1, 2, figsize=(11, 5), layout="constrained")
+    counts = [(y_valid == 0).sum(), (y_valid == 1).sum()]
+    bars = axes[0].bar([caption("正常", "Normal"), caption("不良品", "Defective")], counts,
+                       color=[COLORS[0], COLORS[2]])
+    for bar, count in zip(bars, counts):
+        axes[0].text(bar.get_x() + bar.get_width() / 2, count + 3, str(count), ha="center")
+    axes[0].set(ylabel=caption("件数", "Count"), ylim=(0, max(counts) * 1.15),
+                title=caption("正常ばかり答えても正解率は高い", "Always normal can still have high accuracy"))
+    for name, color, marker in zip(["precision", "recall", "F1"], COLORS, MARKERS):
+        axes[1].plot(result["しきい値"], result[name], color=color, marker=marker, markersize=4, label=name)
+    axes[1].set(xlabel=caption("しきい値", "Decision threshold"),
+                ylabel=caption("指標の値", "Metric value"), ylim=(0, 1.05),
+                title=caption("同じモデルで、判断する境目を変える", "Change the cutoff for the same model"))
+    axes[1].legend(loc="lower left", fontsize=10)
+    axes[1].grid(alpha=0.2)
+    fig.suptitle(caption("少ない不良品を見つける：設定選び用188件の結果",
+                         "Finding rare defects: results on 188 validation examples"))
+    return fig
+
+
+def feature_importance() -> plt.Figure:
+    """第16章と同じモデル・確認用でのMAEの増加を描く。"""
+    X_train, X_inspect, _, y_train, y_inspect, _ = split_rooms()
+    model = build_rent_model().fit(X_train, y_train)
+    result = importance_table(model, X_inspect, y_inspect).iloc[::-1]
+    names = {
+        "area_sqm": caption("広さ", "Area"), "zone": caption("地域", "Zone"),
+        "walk_min": caption("駅からの時間", "Walk time"), "age_years": caption("築年数", "Age"),
+    }
+    fig, ax = plt.subplots(figsize=(9, 5), layout="constrained")
+    ax.barh([names[name] for name in result["feature"]], result["MAE増加の平均"],
+            xerr=result["ばらつき"], color=COLORS[0], alpha=0.85, capsize=5)
+    ax.axvline(0, color="#53708d", linewidth=1)
+    ax.set(xlabel=caption("MAEの増加（万円）", "Increase in MAE (10,000 JPY)"),
+           title=caption("1列を入れ替える：棒は10回の平均、線は標準偏差",
+                         "Shuffle one feature: mean of ten repeats with one standard deviation"))
+    ax.grid(axis="x", alpha=0.2)
+    return fig
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="教材のデータを11枚のPNGグラフにして保存します。")
+    parser = argparse.ArgumentParser(description="教材のデータを14枚のPNGグラフにして保存します。")
     parser.add_argument("--output-dir", type=Path,
                         default=Path(__file__).resolve().parents[1] / "outputs" / "figures",
                         help="画像の保存先（既定: 教材フォルダの outputs/figures）")
@@ -393,6 +466,9 @@ def main() -> None:
         ("09_parameter_search.png", parameter_search),
         ("10_pca.png", pca_projection),
         ("11_csv_prediction.png", csv_predictions),
+        ("12_learning_curves.png", learning_curves),
+        ("13_imbalanced_classification.png", imbalanced_classification),
+        ("14_feature_importance.png", feature_importance),
     ]
     for filename, draw in figures:
         fig = draw()

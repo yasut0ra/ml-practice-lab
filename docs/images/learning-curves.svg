@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="640" viewBox="0 0 800 640" role="img" aria-labelledby="title desc">
+<title id="title">使う例の数を変え、学習用と検証用を比べる</title>
+<desc id="desc">400件から最終テスト100件を残し、300件の中の5分割CVで学習側240件と検証側60件を作る。学習側から48、96、144、192、240件の部分を取り、毎回新しく学習する。学習用と検証用で採点し、5回の平均を比べて次の改善を考える。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#53708d"/></marker></defs>
+<rect width="800" height="640" rx="18" fill="white"/>
+<g font-family="'Hiragino Sans', 'Noto Sans JP', Meiryo, sans-serif" fill="#19324d">
+<text x="32" y="46" font-size="27" text-anchor="start" font-weight="600">使う例の数を変え、2つの成績を比べる</text>
+<text x="32" y="81" font-size="20" text-anchor="start">学習曲線：練習した例と、別の例の点数を見る</text>
+<rect x="32" y="106" width="480" height="65" rx="12" fill="#eaf5f0"/>
+<text x="272" y="147" font-size="23" text-anchor="middle" font-weight="600">学習用の全体：300件</text>
+<rect x="544" y="106" width="224" height="65" rx="12" fill="#fff6e9"/>
+<text x="656" y="146" font-size="21" text-anchor="middle" font-weight="600">最終テスト100件</text>
+<path d="M272,174 V204" stroke="#53708d" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+<rect x="32" y="212" width="736" height="94" rx="12" fill="#edf4fb"/>
+<text x="55" y="246" font-size="23" text-anchor="start" font-weight="600">1回のCV：学習側240件 ／ 検証側60件</text>
+<text x="55" y="282" font-size="20" text-anchor="start">この分け方を5回入れ替える。最終テストは使わない。</text>
+<text x="32" y="347" font-size="22" text-anchor="start" font-weight="600">学習側から使う件数を変える</text>
+<text x="95" y="391" font-size="19" text-anchor="end">48件</text>
+<rect x="112" y="370" width="48" height="27" rx="12" fill="#28806b"/>
+<text x="95" y="431" font-size="19" text-anchor="end">96件</text>
+<rect x="112" y="410" width="96" height="27" rx="12" fill="#28806b"/>
+<text x="95" y="471" font-size="19" text-anchor="end">144件</text>
+<rect x="112" y="450" width="144" height="27" rx="12" fill="#28806b"/>
+<text x="95" y="511" font-size="19" text-anchor="end">192件</text>
+<rect x="112" y="490" width="192" height="27" rx="12" fill="#28806b"/>
+<text x="95" y="551" font-size="19" text-anchor="end">240件</text>
+<rect x="112" y="530" width="240" height="27" rx="12" fill="#28806b"/>
+<path d="M364,450 H402" stroke="#53708d" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+<rect x="416" y="371" width="352" height="181" rx="12" fill="#eaf5f0"/>
+<text x="440" y="408" font-size="21" text-anchor="start" font-weight="600">毎回、新しくモデルを学習</text>
+<text x="440" y="449" font-size="21" text-anchor="start">① 学習した例で採点</text>
+<text x="440" y="487" font-size="21" text-anchor="start">② 検証用60件でも採点</text>
+<text x="440" y="526" font-size="20" text-anchor="start">5回の平均を、件数ごとに比較</text>
+<text x="400" y="591" font-size="20" text-anchor="middle">2つの成績の差と、検証用の伸びから次の実験を考える</text>
+<text x="400" y="623" font-size="20" text-anchor="middle">件数を増やせば、必ず毎回良くなるとは限らない</text>
+</g>
+</svg>
