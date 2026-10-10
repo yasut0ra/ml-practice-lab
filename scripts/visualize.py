@@ -1,4 +1,4 @@
-"""実際のデータを8枚の図にする。実行: .venv/bin/python scripts/visualize.py"""
+"""実際のデータを11枚の図にする。実行: .venv/bin/python scripts/visualize.py"""
 
 from __future__ import annotations
 
@@ -26,6 +26,9 @@ from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 
 from ch05_split_cv import build_model
+from ch11_parameter_search import build_search, comparison_table
+from ch12_pca import build_projection
+from ch13_csv_regression import FEATURES, TARGET, build_model as build_rent_model, load_rent_data
 
 
 COLORS = ["#2765a1", "#28806b", "#b06a20"]
@@ -283,8 +286,94 @@ def decision_boundaries() -> plt.Figure:
     return fig
 
 
+def parameter_search() -> plt.Figure:
+    """第11章と同じCVで、設定ごとの平均と標準偏差を描く。"""
+    data = load_iris(as_frame=True)
+    X_train, _, y_train, _ = train_test_split(
+        data.data, data.target, test_size=0.25, random_state=42, stratify=data.target
+    )
+    result = comparison_table(build_search().fit(X_train, y_train))
+    fig, ax = plt.subplots(figsize=(9, 5), layout="constrained")
+    for kernel, color, marker in zip(["linear", "rbf"], COLORS, MARKERS):
+        selected = result[result["kernel"] == kernel].sort_values("C")
+        ax.errorbar(selected["C"].astype(float), selected["CV平均"],
+                    yerr=selected["CVばらつき"], label=kernel, color=color,
+                    marker=marker, markersize=8, capsize=6, linewidth=2)
+    ax.set(xscale="log", xticks=[0.1, 1, 10], xticklabels=["0.1", "1", "10"],
+           xlabel=caption("C（対数目盛）", "C (log scale)"),
+           ylabel=caption("CVの平均正解率", "Mean CV accuracy"), ylim=(0.8, 1.04),
+           title=caption("設定を比べる：点は平均、線は5回の標準偏差",
+                         "Compare settings: mean accuracy with +/- one standard deviation"))
+    ax.legend(title="kernel")
+    ax.grid(alpha=0.2)
+    return fig
+
+
+def pca_projection() -> plt.Figure:
+    """第12章と同じ尺度・軸で、花の位置と累積寄与率を描く。"""
+    data = load_iris(as_frame=True)
+    X_train, X_check, y_train, y_check = train_test_split(
+        data.data, data.target, test_size=0.25, random_state=42, stratify=data.target
+    )
+    projection = build_projection().fit(X_train)
+    train_points, check_points = projection.transform(X_train), projection.transform(X_check)
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5), layout="constrained")
+    for group, name in enumerate(data.target_names):
+        selected = y_train.to_numpy() == group
+        axes[0].scatter(train_points[selected, 0], train_points[selected, 1],
+                        color=COLORS[group], marker=MARKERS[group], s=24, alpha=0.6, label=name)
+        selected = y_check.to_numpy() == group
+        axes[0].scatter(check_points[selected, 0], check_points[selected, 1],
+                        color=COLORS[group], marker=MARKERS[group], s=65,
+                        edgecolor="#19324d", linewidth=1.2)
+    axes[0].set(title=caption("4列を組み合わせて2軸に", "Combine four features into two axes"),
+                xlabel=caption("第1軸", "Principal component 1"),
+                ylabel=caption("第2軸", "Principal component 2"))
+    axes[0].legend(fontsize=9, title=caption("本当の品種", "Actual variety"))
+    full_projection = build_projection(4).fit(X_train)
+    cumulative = np.cumsum(full_projection.named_steps["pca"].explained_variance_ratio_)
+    axes[1].plot([1, 2, 3, 4], cumulative, color=COLORS[0], marker="o", linewidth=2)
+    for count, ratio in enumerate(cumulative, start=1):
+        axes[1].annotate(f"{ratio:.1%}", (count, ratio), xytext=(0, -22),
+                         textcoords="offset points", ha="center", fontsize=11)
+    axes[1].set(xticks=[1, 2, 3, 4], ylim=(0, 1.1),
+                xlabel=caption("残す軸の数", "Number of components"),
+                ylabel=caption("累積寄与率", "Cumulative explained variance"),
+                title=caption("標準化した学習用のばらつきを残す割合", "Fraction of standardized training variance retained"))
+    axes[1].grid(alpha=0.2)
+    fig.suptitle(caption("PCA：枠付きは確認用の花。色は本当の品種、予測ではない",
+                         "PCA: outlined points are check data; colors show actual varieties"))
+    return fig
+
+
+def csv_predictions() -> plt.Figure:
+    """第13章と同じ固定モデルの最終テストの予測とずれを描く。"""
+    data = load_rent_data()
+    X_train, X_test, y_train, y_test = train_test_split(
+        data[FEATURES], data[TARGET], test_size=0.25, random_state=42
+    )
+    pred = build_rent_model().fit(X_train, y_train).predict(X_test)
+    fig, axes = plt.subplots(1, 2, figsize=(11, 5), layout="constrained")
+    lower, upper = min(y_test.min(), pred.min()) - 0.5, max(y_test.max(), pred.max()) + 0.5
+    axes[0].scatter(y_test, pred, color=COLORS[0], s=40, alpha=0.8)
+    axes[0].plot([lower, upper], [lower, upper], color=COLORS[1], linestyle="--",
+                 label=caption("予測と実際が一致", "Prediction equals actual"))
+    axes[0].set(xlim=(lower, upper), ylim=(lower, upper),
+                xlabel=caption("実際の家賃（万円）", "Actual rent (10,000 JPY)"),
+                ylabel=caption("予測した家賃（万円）", "Predicted rent (10,000 JPY)"))
+    axes[0].legend(fontsize=10)
+    axes[1].scatter(y_test, pred - y_test, color=COLORS[2], s=40, alpha=0.8)
+    axes[1].axhline(0, color="#53708d", linestyle="--")
+    axes[1].set(xlabel=caption("実際の家賃（万円）", "Actual rent (10,000 JPY)"),
+                ylabel=caption("予測 − 実際（万円）", "Predicted - actual (10,000 JPY)"),
+                title=caption("0より上は高め、下は安めの予想", "Above zero: too high; below zero: too low"))
+    fig.suptitle(caption("CSVからの家賃予想：架空データの最終テスト30件",
+                         "Rent predictions from CSV: 30 final test cases from fictional data"))
+    return fig
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="教材のデータを8枚のPNGグラフにして保存します。")
+    parser = argparse.ArgumentParser(description="教材のデータを11枚のPNGグラフにして保存します。")
     parser.add_argument("--output-dir", type=Path,
                         default=Path(__file__).resolve().parents[1] / "outputs" / "figures",
                         help="画像の保存先（既定: 教材フォルダの outputs/figures）")
@@ -301,6 +390,9 @@ def main() -> None:
         ("06_clustering.png", clustering),
         ("07_overfitting.png", overfitting),
         ("08_decision_boundaries.png", decision_boundaries),
+        ("09_parameter_search.png", parameter_search),
+        ("10_pca.png", pca_projection),
+        ("11_csv_prediction.png", csv_predictions),
     ]
     for filename, draw in figures:
         fig = draw()

@@ -85,7 +85,8 @@ make answers
 │   ├── capstone.md         # 仕上げの総合課題
 │   └── images/            # 各章の図解（インストール不要で読めます）
 ├── datasets/
-│   └── README.md
+│   ├── README.md
+│   └── rent_practice.csv   # 120件の架空の部屋一覧
 ├── scripts/
 │   ├── ch00_first_prediction.py
 │   ├── ch01_basic_concepts.py
@@ -98,6 +99,10 @@ make answers
 │   ├── ch08_svm_knn.py
 │   ├── ch09_clustering.py
 │   ├── ch10_model_comparison.py
+│   ├── ch11_parameter_search.py
+│   ├── ch12_pca.py
+│   ├── ch13_csv_regression.py
+│   ├── make_rent_data.py   # 架空CSVの作り方・再生成
 │   ├── visualize.py       # 実際のデータをグラフにする
 │   ├── check_materials.py # 教材のリンク・章の構成を確認する
 │   └── run_all.py
@@ -121,6 +126,8 @@ make answers
 
 最初の区切りは**第0〜3章**です。「データから学ぶ」「数値を予想する」「種類を当てる」が説明できれば十分です。
 第4〜6章で予測の確かめ方を学び、第7〜10章でさまざまな方法を比べます。
+第11〜13章は発展編です。設定の選び方、特徴量をまとめた図、CSVを使った家賃予想へ進めます。
+基礎を一通り学んだら、興味のある章から取り組んで構いません。
 
 各章の「この章のゴール」が説明できたら先に進みます。
 変更前後の数値と考えた理由は[実験ノート](docs/experiment-log.md)に残し、
@@ -135,7 +142,7 @@ make answers
 Windows では `.venv\Scripts\python.exe scripts/visualize.py` を使います。
 `make` が使える場合は `make visuals` でも実行できます。
 
-`outputs/figures/` に8枚の PNG 画像ができます。画像を開いて、各章の説明と見比べてください。
+`outputs/figures/` に11枚の PNG 画像ができます。画像を開いて、各章の説明と見比べてください。
 画面を表示できない環境でも、画像ファイルとして保存できます。
 
 | 画像 | 見るポイント | 関連する章 |
@@ -148,6 +155,9 @@ Windows では `.venv\Scripts\python.exe scripts/visualize.py` を使います�
 | `06_clustering.png` | 同じ点が、似たもの同士のグループに分かれる様子 | 9 |
 | `07_overfitting.png` | 質問を細かくすると、学習用と検証用の成績がどう違うか | 7 |
 | `08_decision_boundaries.png` | 同じ花のデータを、SVMとk-NNがどう分けるか | 3・8 |
+| `09_parameter_search.png` | SVMの設定ごとのCVの平均とばらつき | 11 |
+| `10_pca.png` | 4列の測定値をまとめた2軸の位置と、残せたばらつき | 12 |
+| `11_csv_prediction.png` | CSVから予測した家賃と、実際とのずれ | 13 |
 
 日本語フォントがある環境では日本語で表示します。フォントがない場合は英語になり、
 各章の「グラフで見る」で対応する日本語を確認できます。
@@ -168,6 +178,16 @@ Windows では `.venv\Scripts\python.exe scripts/visualize.py` を使います�
 | 9 | 似たものを集める（クラスタリング） | [コード](scripts/ch09_clustering.py) | [図解と演習](exercises/ch09_clustering.md) | [解答](answers/ch09_answer.py) |
 | 10 | 同じ条件で方法を比べる（モデル比較） | [コード](scripts/ch10_model_comparison.py) | [図解と演習](exercises/ch10_model_comparison.md) | [解答](answers/ch10_answer.py) |
 
+### 発展編
+
+各章のページに、先に学んでおくと読みやすい章を載せています。
+
+| 章 | テーマ | 実行コード | 演習 | 解答 |
+| --- | --- | --- | --- | --- |
+| 11 | モデルの設定を選ぶ（GridSearchCV） | [コード](scripts/ch11_parameter_search.py) | [図解と演習](exercises/ch11_parameter_search.md) | [解答](answers/ch11_answer.py) |
+| 12 | たくさんの特徴を2軸で見る（PCA） | [コード](scripts/ch12_pca.py) | [図解と演習](exercises/ch12_pca.md) | [解答](answers/ch12_answer.py) |
+| 13 | CSVから家賃を予測する | [コード](scripts/ch13_csv_regression.py) | [図解と演習](exercises/ch13_csv_regression.md) | [解答](answers/ch13_answer.py) |
+
 ## 使うデータ
 
 主に scikit-learn 付属データセットを使います。外部ダウンロードなしで動きます。
@@ -177,6 +197,7 @@ Windows では `.venv\Scripts\python.exe scripts/visualize.py` を使います�
 - `load_breast_cancer`: 二値分類、評価指標、モデル比較
 - `load_digits`: 画像分類
 - `make_blobs`: クラスタリングの人工データ
+- `datasets/rent_practice.csv`: 読み込み・前処理・回帰の練習用の架空データ
 
 ## 学習メモ
 

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="700" viewBox="0 0 800 700" role="img" aria-labelledby="title desc">
+<title id="title">CSVを読み込み、家賃の予測までつなげる</title>
+<desc id="desc">120件の架空の部屋一覧から、広さ、駅からの時間、築年数、地域を手がかりにし、家賃を答えにする。部屋番号は学習しない。90件の学習用で前処理と回帰モデルを学び、残り30件の最終テストでMAEを確認する。同じ学習済みモデルで新しい部屋を予測するが、新しい部屋の実際の家賃は未確認。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#53708d"/></marker></defs>
+<rect width="800" height="700" rx="18" fill="white"/>
+<g font-family="'Hiragino Sans', 'Noto Sans JP', Meiryo, sans-serif" fill="#19324d">
+<text x="32" y="46" font-size="27" font-weight="600">CSVを読み込み、家賃の予測までつなげる</text>
+<text x="32" y="82" font-size="20">1行＝1部屋。120件の架空データで練習する</text>
+<rect x="32" y="106" width="736" height="114" rx="14" fill="#edf4fb"/>
+<path d="M52,153 H748" stroke="#a6bcd0"/>
+<g font-size="19" text-anchor="middle">
+<text x="99" y="136">番号</text><text x="219" y="136">広さ</text><text x="339" y="136">駅から</text><text x="459" y="136">築年数</text><text x="579" y="136">地域</text><text x="699" y="136">家賃</text>
+<text x="99" y="185">R001</text><text x="219" y="185">… ㎡</text><text x="339" y="185">… 分</text><text x="459" y="185">… 年</text><text x="579" y="185">郊外</text><text x="699" y="185">… 万円</text>
+</g>
+<text x="32" y="253" font-size="20">手がかりX＝広さ・時間・築年数・地域 ／ 答えy＝家賃</text>
+<text x="32" y="282" font-size="19">番号は結果の確認に使い、Xには入れない</text>
+<rect x="32" y="308" width="400" height="60" rx="12" fill="#eaf5f0" stroke="#28806b"/>
+<text x="232" y="346" text-anchor="middle" font-size="23" font-weight="600">学習用：90件</text>
+<rect x="480" y="308" width="288" height="60" rx="12" fill="#fff6e9" stroke="#b06a20"/>
+<text x="624" y="346" text-anchor="middle" font-size="23" font-weight="600">最終テスト：30件</text>
+<path d="M232,370 V395" stroke="#53708d" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="32" y="403" width="400" height="66" rx="12" fill="#eaf5f0"/>
+<text x="232" y="432" text-anchor="middle" font-size="20">学習用だけで、空欄・尺度・文字を整え</text>
+<text x="232" y="457" text-anchor="middle" font-size="20">回帰モデルを学習する</text>
+<path d="M232,471 V495" stroke="#53708d" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="32" y="503" width="400" height="55" rx="12" fill="#edf4fb"/>
+<text x="232" y="538" text-anchor="middle" font-size="23" font-weight="600">学習済みのPipeline</text>
+<path d="M434,530 H470" stroke="#53708d" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M730,370 V495" stroke="#53708d" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="600" y="427" text-anchor="middle" font-size="20">同じ手順で</text>
+<text x="600" y="455" text-anchor="middle" font-size="20">変換・予測</text>
+<rect x="480" y="503" width="288" height="55" rx="12" fill="#fff6e9"/>
+<text x="624" y="538" text-anchor="middle" font-size="21">実際の家賃と比べてMAE</text>
+<rect x="32" y="592" width="280" height="60" rx="12" fill="#edf4fb"/>
+<text x="172" y="628" text-anchor="middle" font-size="21">新しい部屋の4つの特徴</text>
+<path d="M314,622 H357" stroke="#53708d" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="368" y="592" width="400" height="60" rx="12" fill="#eaf5f0"/>
+<text x="568" y="628" text-anchor="middle" font-size="21">同じ学習済みPipelineで家賃を予想</text>
+<text x="400" y="683" text-anchor="middle" font-size="19">新しい部屋の本当の家賃は未確認。予想の正しさはまだ言えない。</text>
+</g>
+</svg>
