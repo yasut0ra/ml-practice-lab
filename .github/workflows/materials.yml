@@ -1,0 +1,48 @@
+name: 教材の確認
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: ${{ matrix.os }} / Python ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python: '3.10'
+          - os: ubuntu-latest
+            python: '3.11'
+          - os: windows-latest
+            python: '3.11'
+    defaults:
+      run:
+        shell: bash
+    env:
+      PYTHONUTF8: '1'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - name: 道具のインストール
+        run: python -m pip install -r requirements.txt
+      - name: 構文・教材・評価手順の確認
+        run: |
+          python -m compileall -q scripts answers tests
+          python scripts/check_materials.py
+          python -m unittest discover -s tests -v
+      - name: 全章と解答例の実行
+        run: |
+          python scripts/run_all.py
+          python scripts/run_all.py --answers
+      - name: グラフの生成
+        run: python scripts/visualize.py

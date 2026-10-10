@@ -22,7 +22,7 @@
 .venv/bin/python scripts/ch01_basic_concepts.py
 ```
 
-Windows のコマンドは[ガイド](../docs/getting-started.md#第1章を動かすまで)を参照してください。
+Windows のコマンドは[ガイド](../docs/getting-started.md#第0章を動かすまで)を参照してください。
 
 ## コードの読み方
 
@@ -61,7 +61,7 @@ Windows のコマンドは[ガイド](../docs/getting-started.md#第1章を動�
 
 1. `bmi` だけでなく `bp` も特徴量に追加してください。
 2. 最初の 5 件について、実測値と予測値を並べて表示してください。
-3. 係数の符号と大きさを比べてください。このデータは特徴量の尺度がそろっていますが、係数だけで原因や重要性を断定しないようにしましょう。
+3. 係数の符号（プラス・マイナス）と大きさを比べてください。このデータは特徴量の尺度がそろっていますが、係数だけで原因や重要性を断定しないようにしましょう。
 
 ## ヒント
 
@@ -69,6 +69,22 @@ Windows のコマンドは[ガイド](../docs/getting-started.md#第1章を動�
 X = data.data[["bmi", "bp"]]
 pred = model.predict(X.iloc[:5])
 ```
+
+## つまずいたとき
+
+<details>
+<summary>bmiとbpを追加したら、表の取り出し方がわからなくなった</summary>
+
+列が2つなら `data.data[["bmi", "bp"]]` です。外側の括弧で表から選び、内側の並びで列名を指定します。
+変更後に `print(X.shape)` を見て、`(442, 2)` になっているか確認します。
+
+</details>
+
+## この章のゴール
+
+- [ ] Xの1行・1列と、yの同じ行が何を表すか言える。
+- [ ] `fit` と `predict` に渡すものの違いを説明できる。
+- [ ] 学習に使った1件の予想と、初めてのデータでの評価を区別できる。
 
 <details>
 <summary>理解の確認：予測するときにも、答え y を渡す？</summary>
@@ -78,4 +94,4 @@ pred = model.predict(X.iloc[:5])
 
 </details>
 
-[解答例](../answers/ch01_answer.py) · [次の章：数値を予想する](ch02_regression.md) · [教材の入口](../README.md)
+[解答例](../answers/ch01_answer.py) · [前の章](ch00_first_prediction.md) · [次の章：数値を予想する](ch02_regression.md) · [教材の入口](../README.md)

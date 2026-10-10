@@ -8,13 +8,15 @@
 
 ![過去の入力と答えを使ってモデルを学習し、新しい入力から予測を作り、実際の答えと比べて評価する流れ](docs/images/learning-flow.svg)
 
-図の家賃は説明用の架空の例です。実際のコードでは、付属の花・手書き数字などのデータを使います。
+図の家賃は説明用の架空の例です。第0章で同じ題材を動かし、第1章から付属の花・手書き数字などのデータへ進みます。
 
 ## 初めての人はここから
 
 1. [はじめての機械学習ガイド](docs/getting-started.md)を読む。「入力」「答え」「モデル」の意味から説明します。
-2. 下の手順で**第1章だけ**動かす。最初から全部のコードを理解する必要はありません。
-3. [第1章の図解と演習](exercises/ch01_basic_concepts.md)で、画面に出た数字の意味を確認する。
+2. 下の手順で**第0章の家賃予想**を動かす。最初から全部のコードを理解する必要はありません。
+3. [第0章の図解と演習](exercises/ch00_first_prediction.md)で、自分の予想と画面の数字を見比べる。
+
+[学習の道順と各章のゴール](docs/learning-path.md)で、次に何を学ぶか確認できます。
 
 前提は「Python のファイルを実行できること」です。数学の公式や機械学習の知識は、最初は必要ありません。
 Python も初めてなら、ガイドの[コードを読むための最低限の約束](docs/getting-started.md#コードを読むための最低限の約束)を先に見てください。
@@ -29,7 +31,7 @@ macOS / Linux:
 ```bash
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python scripts/ch01_basic_concepts.py
+.venv/bin/python scripts/ch00_first_prediction.py
 ```
 
 Windows（PowerShell）:
@@ -37,10 +39,10 @@ Windows（PowerShell）:
 ```powershell
 py -3 -m venv .venv
 .venv\Scripts\python.exe -m pip install -r requirements.txt
-.venv\Scripts\python.exe scripts/ch01_basic_concepts.py
+.venv\Scripts\python.exe scripts/ch00_first_prediction.py
 ```
 
-1行目は教材専用の Python 環境を作り、2行目は必要な道具を入れ、3行目は第1章を実行します。
+1行目は教材専用の Python 環境を作り、2行目は必要な道具を入れ、3行目は第0章を実行します。
 環境を作る作業とインストールは初回だけで大丈夫です。
 つまずいたら、ガイドの[よくあるつまずき](docs/getting-started.md#よくあるつまずき)を確認してください。
 
@@ -56,7 +58,7 @@ make setup
 make run
 ```
 
-構文チェックと短い実行確認を行います。
+構文・教材のリンク・評価手順を確認し、全章を実行します。
 
 ```bash
 make check
@@ -78,10 +80,14 @@ make answers
 ├── cheatsheet.md
 ├── docs/
 │   ├── getting-started.md  # 身近な例・用語・最初の実行手順
+│   ├── learning-path.md    # 学習順序・時間の目安・到達目標
+│   ├── experiment-log.md   # 予想・実験・考察を記録するノート
+│   ├── capstone.md         # 仕上げの総合課題
 │   └── images/            # 各章の図解（インストール不要で読めます）
 ├── datasets/
 │   └── README.md
 ├── scripts/
+│   ├── ch00_first_prediction.py
 │   ├── ch01_basic_concepts.py
 │   ├── ch02_regression.py
 │   ├── ch03_classification.py
@@ -93,11 +99,14 @@ make answers
 │   ├── ch09_clustering.py
 │   ├── ch10_model_comparison.py
 │   ├── visualize.py       # 実際のデータをグラフにする
+│   ├── check_materials.py # 教材のリンク・章の構成を確認する
 │   └── run_all.py
 ├── exercises/
 │   └── chXX_*.md
-└── answers/
-    └── chXX_answer.py
+├── answers/
+│   ├── README.md          # 各問の解答の考え方
+│   └── chXX_answer.py
+└── tests/                # 評価手順などの確認
 ```
 
 ## 学習の進め方
@@ -110,8 +119,12 @@ make answers
 4. 「まずはここだけ」で、小さな変更を1つ試す。
 5. 慣れてきたら練習問題に進み、必要なときに解答例を見る。
 
-最初の区切りは**第1〜3章**です。「データから学ぶ」「数値を予想する」「種類を当てる」が説明できれば十分です。
+最初の区切りは**第0〜3章**です。「データから学ぶ」「数値を予想する」「種類を当てる」が説明できれば十分です。
 第4〜6章で予測の確かめ方を学び、第7〜10章でさまざまな方法を比べます。
+
+各章の「この章のゴール」が説明できたら先に進みます。
+変更前後の数値と考えた理由は[実験ノート](docs/experiment-log.md)に残し、
+一通り学んだら[総合課題](docs/capstone.md)でモデル選びから最後の評価まで試してください。
 
 ## 実際のデータをグラフで見る
 
@@ -122,7 +135,7 @@ make answers
 Windows では `.venv\Scripts\python.exe scripts/visualize.py` を使います。
 `make` が使える場合は `make visuals` でも実行できます。
 
-`outputs/figures/` に6枚の PNG 画像ができます。画像を開いて、各章の説明と見比べてください。
+`outputs/figures/` に8枚の PNG 画像ができます。画像を開いて、各章の説明と見比べてください。
 画面を表示できない環境でも、画像ファイルとして保存できます。
 
 | 画像 | 見るポイント | 関連する章 |
@@ -133,6 +146,8 @@ Windows では `.venv\Scripts\python.exe scripts/visualize.py` を使います�
 | `04_cross_validation.png` | 学習する部分と確認する部分を入れ替える仕組み | 5 |
 | `05_digits.png` | 手書きの数字が、8 × 8 個の数値として扱われること | 8 |
 | `06_clustering.png` | 同じ点が、似たもの同士のグループに分かれる様子 | 9 |
+| `07_overfitting.png` | 質問を細かくすると、学習用と検証用の成績がどう違うか | 7 |
+| `08_decision_boundaries.png` | 同じ花のデータを、SVMとk-NNがどう分けるか | 3・8 |
 
 日本語フォントがある環境では日本語で表示します。フォントがない場合は英語になり、
 各章の「グラフで見る」で対応する日本語を確認できます。
@@ -141,6 +156,7 @@ Windows では `.venv\Scripts\python.exe scripts/visualize.py` を使います�
 
 | 章 | テーマ | 実行コード | 演習 | 解答 |
 | --- | --- | --- | --- | --- |
+| 0 | 家賃の予想を動かしてみる | [コード](scripts/ch00_first_prediction.py) | [図解と演習](exercises/ch00_first_prediction.md) | [解答](answers/ch00_answer.py) |
 | 1 | データから学ぶってどういうこと？ | [コード](scripts/ch01_basic_concepts.py) | [図解と演習](exercises/ch01_basic_concepts.md) | [解答](answers/ch01_answer.py) |
 | 2 | 数値を予想する（回帰） | [コード](scripts/ch02_regression.py) | [図解と演習](exercises/ch02_regression.md) | [解答](answers/ch02_answer.py) |
 | 3 | 種類を当てる（分類） | [コード](scripts/ch03_classification.py) | [図解と演習](exercises/ch03_classification.md) | [解答](answers/ch03_answer.py) |
@@ -168,3 +184,9 @@ Windows では `.venv\Scripts\python.exe scripts/visualize.py` を使います�
 - `random_state=42` は結果を再現しやすくするための固定値です。
 - 章のコードは短くしてあります。慣れてきたら特徴量、モデル、評価指標を変更して結果を比較してください。
 - わからない言葉は[日本語つきの用語早見表](cheatsheet.md)で確認できます。
+
+## 教材の変更を確認する
+
+`make check`・`make answers`・`make visuals` で確認できます。
+解答でエラーが出たら、その章で実行を止めるため、失敗を見落としにくくなっています。
+PRではLinuxとWindowsの実行確認もGitHub Actionsで行います。

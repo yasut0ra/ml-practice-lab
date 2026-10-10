@@ -31,6 +31,7 @@
 | `Pipeline(...)` | 数値を整える処理とモデルを、1つの手順にまとめる |
 | `LogisticRegression(...)` | 種類を予想するモデルを準備する |
 | `accuracy_score(y_test, pred)` | 実際の品種と予想を比べて正解率を求める |
+| `DummyClassifier(strategy="most_frequent")` | 学習用で最も多い品種を、どの花にも同じように答える |
 
 `LogisticRegression` は名前に Regression とあっても、**分類用**のモデルです。
 
@@ -39,6 +40,7 @@
 `accuracy: 0.9667` なら、約96.7%が正解です。これは読み方の例で、環境により数値は変わります。
 `actual` は本当の品種、`predicted` は予想した品種です。まずは5件の予想が一致しているかを見てください。
 全体の正解率と「最初の5件の正解数」は別のものです。
+`Baseline` は単純な基準の正解率です。モデルが、この基準よりうまく種類を当てたかを比べます。
 
 ## グラフで見る
 
@@ -65,6 +67,23 @@ from sklearn.metrics import confusion_matrix
 
 print(confusion_matrix(y_test, pred))
 ```
+
+## つまずいたとき
+
+<details>
+<summary>stratifyを外したのに、正解率が変わらない</summary>
+
+まず `print(y_test.value_counts().sort_index())` で各品種の件数を見ます。
+割合が変わっても正解率が同じ場合はあります。割合と正解率は別の観察です。
+がく片の2列だけに変える実験では、stratifyを元に戻し、特徴量だけを変えて比べます。
+
+</details>
+
+## この章のゴール
+
+- [ ] 品種番号の0・1・2は種類の名前で、数値の大小ではないと言える。
+- [ ] 正解率を「何件中何件」と説明できる。
+- [ ] 特徴量の変更と、分割方法の変更を別々に比較できる。
 
 <details>
 <summary>理解の確認：花の高さを予想するのも分類？</summary>

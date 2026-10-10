@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 from sklearn.datasets import load_diabetes
+from sklearn.dummy import DummyRegressor
 from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
@@ -34,7 +35,12 @@ def main() -> None:
         X, y, test_size=0.2, random_state=42
     )
 
-    # 3. 同じ確認用データで、2つのモデルの予想のずれを比べる。
+    # 3. 単純な基準: 手がかりを見ず、学習用の答えの平均をいつも答える。
+    baseline = DummyRegressor(strategy="mean")
+    baseline.fit(X_train, y_train)
+    evaluate_regression("Baseline（いつも学習用の平均を答える）", y_test, baseline.predict(X_test))
+
+    # 4. 同じ確認用データで、学習するモデルが基準より良いか比べる。
     linear = LinearRegression()
     linear.fit(X_train, y_train)
     evaluate_regression("LinearRegression", y_test, linear.predict(X_test))
@@ -44,6 +50,7 @@ def main() -> None:
     evaluate_regression("Ridge", y_test, ridge.predict(X_test))
     print("\nまずは MAE を見ましょう。予想のずれの平均で、小さいほど近い予想です。")
     print("RMSE も小さいほど良く、R2 は1に近いほど良い値です（正解率ではありません）。")
+    print("モデルの MAE が Baseline より小さければ、今回の確認用では単純な基準より良い予想です。")
 
 
 if __name__ == "__main__":

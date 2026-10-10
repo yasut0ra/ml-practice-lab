@@ -7,6 +7,7 @@ from pathlib import Path
 
 
 CHAPTERS = [
+    "ch00_first_prediction.py",
     "ch01_basic_concepts.py",
     "ch02_regression.py",
     "ch03_classification.py",
@@ -25,15 +26,17 @@ def main() -> None:
     parser.add_argument(
         "--fast",
         action="store_true",
-        help="Reserved for quick checks. Current scripts are already lightweight.",
+        help=argparse.SUPPRESS,  # 過去の実行コマンドとの互換用
     )
-    parser.parse_args()
+    parser.add_argument("--answers", action="store_true", help="サンプルの代わりに全章の解答を実行する")
+    args = parser.parse_args()
 
     repo_root = Path(__file__).resolve().parents[1]
-    scripts_dir = repo_root / "scripts"
+    scripts_dir = repo_root / ("answers" if args.answers else "scripts")
 
     for chapter in CHAPTERS:
-        path = scripts_dir / chapter
+        filename = f"{chapter[:4]}_answer.py" if args.answers else chapter
+        path = scripts_dir / filename
         print(f"\n>>> python {path.relative_to(repo_root)}", flush=True)
         subprocess.run([sys.executable, str(path)], cwd=repo_root, check=True)
 
