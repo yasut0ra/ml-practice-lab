@@ -18,6 +18,9 @@ CHAPTERS = [
     "ch08_svm_knn.py",
     "ch09_clustering.py",
     "ch10_model_comparison.py",
+    "ch11_parameter_search.py",
+    "ch12_pca.py",
+    "ch13_csv_regression.py",
 ]
 
 

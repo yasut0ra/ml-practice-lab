@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="640" viewBox="0 0 800 640" role="img" aria-labelledby="title desc">
+<title id="title">設定の候補を、学習用だけで比べる</title>
+<desc id="desc">Cが0.1、1、10の3種類、kernelがlinearとrbfの2種類で6候補。学習用の5分割CVで候補ごとに標準化とSVMを学び、平均正解率で選ぶ。選んだ設定で学習用全体を学び直し、別に取っておいた最終テストで1回確かめる。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#53708d"/></marker></defs>
+<rect width="800" height="640" rx="18" fill="white"/>
+<g font-family="'Hiragino Sans', 'Noto Sans JP', Meiryo, sans-serif" fill="#19324d">
+<text x="32" y="46" font-size="27" font-weight="600">設定の候補を、学習用だけで比べる</text>
+<text x="32" y="81" font-size="20">同じSVM・同じデータ・同じ採点方法で比較</text>
+<rect x="32" y="106" width="736" height="204" rx="14" fill="#edf4fb"/>
+<text x="57" y="143" font-size="22" font-weight="600">6つの候補</text>
+<text x="345" y="146" text-anchor="middle" font-size="21">C = 0.1</text>
+<text x="505" y="146" text-anchor="middle" font-size="21">C = 1</text>
+<text x="665" y="146" text-anchor="middle" font-size="21">C = 10</text>
+<text x="57" y="206" font-size="21">linear（直線的）</text>
+<text x="57" y="269" font-size="21">rbf（曲がる）</text>
+<g fill="#2765a1"><circle cx="345" cy="199" r="19"/><circle cx="505" cy="199" r="19"/><circle cx="665" cy="199" r="19"/></g>
+<g fill="#28806b"><rect x="326" y="243" width="38" height="38" rx="5"/><rect x="486" y="243" width="38" height="38" rx="5"/><rect x="646" y="243" width="38" height="38" rx="5"/></g>
+<path d="M273,312 V344" stroke="#53708d" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="32" y="352" width="476" height="138" rx="14" fill="#eaf5f0" stroke="#28806b"/>
+<text x="56" y="389" font-size="23" font-weight="600">学習用の中で、5分割CV</text>
+<text x="56" y="424" font-size="20">各回：標準化 → 学習 → 検証側で採点</text>
+<text x="56" y="459" font-size="20">6候補 × 5回。平均正解率で選ぶ</text>
+<rect x="544" y="352" width="224" height="138" rx="14" fill="#fff6e9" stroke="#b06a20"/>
+<text x="656" y="397" text-anchor="middle" font-size="23" font-weight="600">最終テスト</text>
+<text x="656" y="434" text-anchor="middle" font-size="20">ここでは使わず</text>
+<text x="656" y="465" text-anchor="middle" font-size="20">取っておく</text>
+<path d="M273,492 V521" stroke="#53708d" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="32" y="530" width="476" height="62" rx="12" fill="#edf4fb"/>
+<text x="270" y="568" text-anchor="middle" font-size="21">選んだ設定で、学習用全体を学び直す</text>
+<path d="M510,561 H539" stroke="#53708d" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M656,492 V522" stroke="#b06a20" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="544" y="530" width="224" height="62" rx="12" fill="#fff6e9"/>
+<text x="656" y="568" text-anchor="middle" font-size="21">最後に1回確認</text>
+<text x="400" y="625" text-anchor="middle" font-size="19">最後の成績を見て、設定を選び直さない</text>
+</g>
+</svg>

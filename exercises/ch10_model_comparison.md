@@ -97,4 +97,4 @@ CSVの保存では、保存先のフォルダを先に作ったかも確認し�
 
 </details>
 
-[解答例](../answers/ch10_answer.py) · [総合課題へ](../docs/capstone.md) · [前の章](ch09_clustering.md) · [用語早見表](../cheatsheet.md) · [教材の入口](../README.md)
+[解答例](../answers/ch10_answer.py) · [総合課題へ](../docs/capstone.md) · [発展編：設定を選ぶ](ch11_parameter_search.md) · [前の章](ch09_clustering.md) · [用語早見表](../cheatsheet.md) · [教材の入口](../README.md)
