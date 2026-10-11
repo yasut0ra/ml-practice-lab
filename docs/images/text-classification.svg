@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="690" viewBox="0 0 800 690" role="img" aria-labelledby="title desc">
+<title id="title">文章を数値に変えて、担当を予想する</title>
+<desc id="desc">荷物がという文を、重なりのある荷物、物が、荷物がの2〜3文字に切る。学習用の36文だけで辞書の列とTF-IDFの重みを決め、数値と担当のラベルから分類を学ぶ。新しい文は同じ辞書と重みで変換し、配送か支払いを一つ予想する。単語の意味を理解した証明ではない。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#53708d"/></marker></defs>
+<rect width="800" height="690" rx="18" fill="white"/>
+<g font-family="'Hiragino Sans', 'Noto Sans JP', Meiryo, sans-serif" fill="#19324d">
+<text x="32" y="46" font-size="27" font-weight="600">文章を数値に変えて、担当を予想する</text>
+<text x="32" y="84" font-size="20">一つの文章が一つの行。文字のかたまりが列になる。</text>
+<rect x="32" y="111" width="222" height="110" rx="12" fill="#edf4fb"/>
+<text x="143" y="151" font-size="21" text-anchor="middle">切り方の例</text>
+<text x="143" y="191" font-size="28" text-anchor="middle" font-weight="600">荷物が</text>
+<rect x="337" y="111" width="431" height="110" rx="12" fill="#eaf5f0"/>
+<text x="552" y="151" font-size="21" text-anchor="middle">重なりのある2〜3文字</text>
+<text x="552" y="191" font-size="25" text-anchor="middle" font-weight="600">荷物 ／ 物が ／ 荷物が</text>
+<path d="M263,166 H326" stroke="#53708d" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M552,231 V269" stroke="#53708d" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="32" y="285" width="736" height="111" rx="12" fill="#edf4fb"/>
+<text x="400" y="325" font-size="23" text-anchor="middle" font-weight="600">TF-IDF：かたまりに重みを付けて数値へ</text>
+<text x="400" y="366" font-size="20" text-anchor="middle">文の中の出現回数と、何件の文に出るかを使う</text>
+<text x="400" y="434" font-size="20" text-anchor="middle">辞書・重み・分類は、学習用36件だけから決める</text>
+<rect x="32" y="469" width="203" height="88" rx="12" fill="#edf4fb"/>
+<text x="133" y="506" font-size="21" text-anchor="middle">新しい文章</text>
+<text x="133" y="539" font-size="19" text-anchor="middle">「請求が二重」</text>
+<rect x="291" y="469" width="280" height="88" rx="12" fill="#eaf5f0"/>
+<text x="431" y="506" font-size="21" text-anchor="middle">同じ変換 → 分類</text>
+<text x="431" y="539" font-size="19" text-anchor="middle">辞書を作り直さない</text>
+<rect x="627" y="469" width="141" height="88" rx="12" fill="#fff0d7"/>
+<text x="697" y="506" font-size="19" text-anchor="middle">予想</text>
+<text x="697" y="539" font-size="23" text-anchor="middle" font-weight="600">支払い</text>
+<path d="M243,512 H281" stroke="#53708d" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M579,512 H617" stroke="#53708d" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="400" y="601" font-size="21" text-anchor="middle">辞書にないかたまりは、新しい列にはならない。</text>
+<text x="400" y="641" font-size="20" text-anchor="middle">必ず担当を一つ答える。意味を理解した証明ではない。</text>
+</g>
+</svg>

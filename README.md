@@ -105,6 +105,10 @@ make answers
 │   ├── ch14_learning_curves.py
 │   ├── ch15_imbalanced_classification.py
 │   ├── ch16_feature_importance.py
+│   ├── ch17_model_persistence.py
+│   ├── ch18_text_classification.py
+│   ├── ch19_time_series.py
+│   ├── predict_saved_rent.py # 保存したモデルで予測だけ行う
 │   ├── make_rent_data.py   # 架空CSVの作り方・再生成
 │   ├── visualize.py       # 実際のデータをグラフにする
 │   ├── check_materials.py # 教材のリンク・章の構成を確認する
@@ -129,7 +133,8 @@ make answers
 
 最初の区切りは**第0〜3章**です。「データから学ぶ」「数値を予想する」「種類を当てる」が説明できれば十分です。
 第4〜6章で予測の確かめ方を学び、第7〜10章でさまざまな方法を比べます。
-第11〜16章は発展編です。設定選び・PCA・CSVでの予測に加え、データの件数、不均衡な分類、手がかりの重要度を調べます。
+第11〜19章は発展編です。設定選び・PCA・CSVでの予測に加え、データの件数、不均衡な分類、手がかりの重要度を調べます。
+モデルの保存と再利用、日本語の文章分類、時間順データの予測にも進めます。
 基礎を一通り学んだら、興味のある章から取り組んで構いません。
 
 各章の「この章のゴール」が説明できたら先に進みます。
@@ -145,7 +150,7 @@ make answers
 Windows では `.venv\Scripts\python.exe scripts/visualize.py` を使います。
 `make` が使える場合は `make visuals` でも実行できます。
 
-`outputs/figures/` に14枚の PNG 画像ができます。画像を開いて、各章の説明と見比べてください。
+`outputs/figures/` に16枚の PNG 画像ができます。画像を開いて、各章の説明と見比べてください。
 画面を表示できない環境でも、画像ファイルとして保存できます。
 
 | 画像 | 見るポイント | 関連する章 |
@@ -164,6 +169,8 @@ Windows では `.venv\Scripts\python.exe scripts/visualize.py` を使います�
 | `12_learning_curves.png` | 学習する件数で、学習用・検証用の成績がどう変わるか | 14 |
 | `13_imbalanced_classification.png` | 少ない不良品の件数と、しきい値による指標の変化 | 15 |
 | `14_feature_importance.png` | 1列を入れ替えると、家賃のずれが何万円増えるか | 16 |
+| `15_text_classification.png` | 問い合わせの分類結果と、文章から作った数値の一部 | 18 |
+| `16_time_series.png` | 日付順の境目と、翌日分の販売個数の予想のずれ | 19 |
 
 日本語フォントがある環境では日本語で表示します。フォントがない場合は英語になり、
 各章の「グラフで見る」で対応する日本語を確認できます。
@@ -196,6 +203,9 @@ Windows では `.venv\Scripts\python.exe scripts/visualize.py` を使います�
 | 14 | データを増やすと成績は変わる？（学習曲線） | [コード](scripts/ch14_learning_curves.py) | [図解と演習](exercises/ch14_learning_curves.md) | [解答](answers/ch14_answer.py) |
 | 15 | 少ない不良品を見つける（不均衡な分類） | [コード](scripts/ch15_imbalanced_classification.py) | [図解と演習](exercises/ch15_imbalanced_classification.md) | [解答](answers/ch15_answer.py) |
 | 16 | モデルが使う手がかりを調べる（重要度） | [コード](scripts/ch16_feature_importance.py) | [図解と演習](exercises/ch16_feature_importance.md) | [解答](answers/ch16_answer.py) |
+| 17 | モデルを保存して、あとで使う | [コード](scripts/ch17_model_persistence.py) | [図解と演習](exercises/ch17_model_persistence.md) | [解答](answers/ch17_answer.py) |
+| 18 | 日本語の問い合わせを分類する | [コード](scripts/ch18_text_classification.py) | [図解と演習](exercises/ch18_text_classification.md) | [解答](answers/ch18_answer.py) |
+| 19 | 時間の順番を守って予測する | [コード](scripts/ch19_time_series.py) | [図解と演習](exercises/ch19_time_series.md) | [解答](answers/ch19_answer.py) |
 
 ## 使うデータ
 
@@ -209,6 +219,8 @@ Windows では `.venv\Scripts\python.exe scripts/visualize.py` を使います�
 - `make_moons`: 学習曲線で使う2種類の人工データ
 - `make_classification`: 少ない不良品を見つける練習用の人工データ
 - `datasets/rent_practice.csv`: 読み込み・前処理・回帰の練習用の架空データ
+- `make_messages()`: 教材用に書いた48件の架空の日本語の問い合わせ
+- `make_sales()`: 曜日による波と増加を持つ210日分の架空の販売個数
 
 ## 学習メモ
 

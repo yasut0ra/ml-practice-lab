@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="620" viewBox="0 0 800 620" role="img" aria-labelledby="title desc">
+<title id="title">学習した仕組みを保存して、あとで使う</title>
+<desc id="desc">学習用90件から空欄の補完、標準化、地域の変換、回帰をまとめて学ぶ。Pipeline全体をjoblibファイルに保存し、別の実行で読み込んで新しい部屋を予想する。読み込み後にfitはしない。予想の一致と正解は別であり、自分のファイルを同じ環境で使う。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#53708d"/></marker></defs>
+<rect width="800" height="620" rx="18" fill="white"/>
+<g font-family="'Hiragino Sans', 'Noto Sans JP', Meiryo, sans-serif" fill="#19324d">
+<text x="32" y="46" font-size="27" font-weight="600">学習した仕組みを保存して、あとで使う</text>
+<text x="32" y="84" font-size="20">① 学ぶとき：学習用90件だけで決める</text>
+<rect x="32" y="108" width="736" height="116" rx="12" fill="#edf4fb" stroke="#b7cee5"/>
+<text x="400" y="145" font-size="23" text-anchor="middle" font-weight="600">学習済みPipeline</text>
+<text x="400" y="184" font-size="21" text-anchor="middle">空欄の補完 → 標準化・地域の変換 → 回帰</text>
+<path d="M400,232 V273" stroke="#53708d" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="427" y="259" font-size="19">まとめて保存：dump</text>
+<rect x="188" y="287" width="424" height="74" rx="12" fill="#fff0d7"/>
+<text x="400" y="331" font-size="23" text-anchor="middle" font-weight="600">rent_pipeline.joblib</text>
+<path d="M400,369 V410" stroke="#53708d" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="427" y="396" font-size="19">読み込む：load</text>
+<text x="32" y="396" font-size="20">② 別の実行で使う</text>
+<rect x="32" y="423" width="194" height="75" rx="12" fill="#edf4fb"/>
+<text x="129" y="467" font-size="21" text-anchor="middle">新しい部屋の表</text>
+<rect x="283" y="423" width="273" height="75" rx="12" fill="#eaf5f0"/>
+<text x="419" y="454" font-size="21" text-anchor="middle" font-weight="600">読み戻したPipeline</text>
+<text x="419" y="482" font-size="19" text-anchor="middle">前処理も同じ方法</text>
+<rect x="613" y="423" width="155" height="75" rx="12" fill="#fff0d7"/>
+<text x="690" y="467" font-size="21" text-anchor="middle">家賃の予想</text>
+<path d="M234,460 H273" stroke="#53708d" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M564,460 H603" stroke="#53708d" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="400" y="540" font-size="22" text-anchor="middle" font-weight="600">predictだけ。学び直すfitは呼ばない。</text>
+<text x="400" y="575" font-size="19" text-anchor="middle">自分のファイルを同じ環境で使う。予想の一致と正解は別。</text>
+</g>
+</svg>
