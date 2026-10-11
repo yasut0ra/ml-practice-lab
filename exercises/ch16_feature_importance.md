@@ -115,6 +115,6 @@ Windowsは `.venv\Scripts\python.exe scripts/ch16_feature_importance.py` です�
 
 </details>
 
-[解答例](../answers/ch16_answer.py) · [前の章](ch15_imbalanced_classification.md) · [総合課題](../docs/capstone.md) · [第13章の家賃CSV](ch13_csv_regression.md) · [教材の入口](../README.md)
+[解答例](../answers/ch16_answer.py) · [前の章](ch15_imbalanced_classification.md) · [次の章](ch17_model_persistence.md) · [総合課題](../docs/capstone.md) · [第13章の家賃CSV](ch13_csv_regression.md) · [教材の入口](../README.md)
 
 詳しい定義と注意点は[Permutation Importanceの公式説明](https://scikit-learn.org/stable/modules/permutation_importance.html)を参照してください。

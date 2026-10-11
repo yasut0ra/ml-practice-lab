@@ -24,6 +24,9 @@ CHAPTERS = [
     "ch14_learning_curves.py",
     "ch15_imbalanced_classification.py",
     "ch16_feature_importance.py",
+    "ch17_model_persistence.py",
+    "ch18_text_classification.py",
+    "ch19_time_series.py",
 ]
 
 

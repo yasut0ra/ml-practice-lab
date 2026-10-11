@@ -1,4 +1,4 @@
-"""実際のデータを14枚の図にする。実行: .venv/bin/python scripts/visualize.py"""
+"""実際のデータを16枚の図にする。実行: .venv/bin/python scripts/visualize.py"""
 
 from __future__ import annotations
 
@@ -11,6 +11,7 @@ import matplotlib
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 from matplotlib import font_manager
 from matplotlib.patches import Patch, Rectangle
 import numpy as np
@@ -32,6 +33,8 @@ from ch13_csv_regression import FEATURES, TARGET, build_model as build_rent_mode
 from ch14_learning_curves import curve_table, make_practice_data
 from ch15_imbalanced_classification import build_model as build_inspection_model, split_inspection_data, threshold_table
 from ch16_feature_importance import importance_table, split_rooms
+from ch18_text_classification import LABELS, build_model as build_text_model, split_messages
+from ch19_time_series import build_model as build_sales_model, make_sales, split_sales
 
 
 COLORS = ["#2765a1", "#28806b", "#b06a20"]
@@ -445,8 +448,65 @@ def feature_importance() -> plt.Figure:
     return fig
 
 
+def text_classification() -> plt.Figure:
+    """第18章の4マスと、新しい文のTF-IDFの一部を描く。"""
+    X_train, X_test, y_train, y_test = split_messages()
+    model = build_text_model().fit(X_train, y_train)
+    pred = model.predict(X_test)
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5), layout="constrained")
+    names = [caption("配送", "Shipping"), caption("支払い", "Payment")]
+    ConfusionMatrixDisplay(confusion_matrix(y_test, pred, labels=LABELS), display_labels=names).plot(
+        ax=axes[0], cmap="Blues", colorbar=False, values_format="d")
+    axes[0].set(xlabel=caption("予想した担当", "Predicted"), ylabel=caption("答えの担当", "Actual"),
+                title=caption("最終テスト12件の結果", "Results on 12 held-out messages"))
+    texts = ["配達の時間を変更できますか", "請求書の金額を確認したいです", "送料を返金してほしいです"]
+    vectorizer = model.named_steps["text"]
+    chunks = ["荷物", "配達", "請求", "返金"]
+    columns = [vectorizer.vocabulary_[chunk] for chunk in chunks]
+    values = vectorizer.transform(texts)[:, columns].toarray()
+    axes[1].imshow(values, cmap="Blues", vmin=0, vmax=max(values.max(), 0.01), aspect="auto")
+    axes[1].set_xticks(range(4), [caption(chunk, english) for chunk, english in zip(chunks, ["Parcel", "Delivery", "Billing", "Refund"])])
+    row_names = [caption("配達時間の変更", "Change delivery time"), caption("請求金額の確認", "Check invoice amount"), caption("送料の返金", "Refund shipping fee")]
+    axes[1].set_yticks(range(3), row_names)
+    axes[1].set(xlabel=caption("文字のかたまり（辞書の4列だけ）", "Character chunks (four dictionary columns)"),
+                title=caption("新しい文のTF-IDF：確信度とは別", "TF-IDF of new messages, not confidence"))
+    for row in range(3):
+        for column in range(4):
+            axes[1].text(column, row, f"{values[row, column]:.2f}", ha="center", va="center",
+                         color="white" if values[row, column] > values.max() / 2 else "#19324d")
+    return fig
+
+
+def time_series() -> plt.Figure:
+    """第19章と同じ、前日までの実績で翌日を予想する評価。"""
+    sales = make_sales()
+    X_train, X_test, y_train, y_test = split_sales()
+    model = build_sales_model().fit(X_train, y_train)
+    fig, axes = plt.subplots(2, 1, figsize=(11, 8), layout="constrained")
+    axes[0].plot(sales.index, sales, color=COLORS[0], linewidth=1.5,
+                 label=caption("実際の個数", "Actual"))
+    axes[0].axvspan(X_test.index[0], X_test.index[-1], color=COLORS[2], alpha=0.12,
+                   label=caption("最終テスト30日", "Final test: 30 days"))
+    axes[0].axvline(X_test.index[0], color=COLORS[2], linestyle="--")
+    axes[0].set(title=caption("日付順で区切る：過去から、その後の日を予想", "Split chronologically: learn from the past"),
+                ylabel=caption("毎日の販売個数", "Daily sales (items)"))
+    axes[1].plot(y_test.index, y_test, marker="o", markersize=4, color=COLORS[0], label=caption("答え", "Actual"))
+    axes[1].plot(y_test.index, model.predict(X_test), marker="s", markersize=4, color=COLORS[1], label=caption("モデル", "Model"))
+    axes[1].plot(y_test.index, X_test["lag_1"], linestyle="--", color=COLORS[2], label=caption("昨日と同じ基準", "Yesterday"))
+    axes[1].set(title=caption("毎日、前日までの実績で翌日分を予想（モデルは固定）", "Daily one-step predictions using observed history (fixed model)"),
+                ylabel=caption("販売個数", "Sales (items)"))
+    axes[1].xaxis.set_major_locator(mdates.DayLocator(interval=4))
+    axes[1].xaxis.set_major_formatter(mdates.DateFormatter("%m/%d"))
+    axes[1].set_xlim(X_test.index[0], X_test.index[-1])
+    for ax in axes:
+        ax.set_xlabel(caption("日付（2025年）", "Date (2025)"))
+        ax.legend(loc="upper left")
+        ax.grid(alpha=0.2)
+    return fig
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="教材のデータを14枚のPNGグラフにして保存します。")
+    parser = argparse.ArgumentParser(description="教材のデータを16枚のPNGグラフにして保存します。")
     parser.add_argument("--output-dir", type=Path,
                         default=Path(__file__).resolve().parents[1] / "outputs" / "figures",
                         help="画像の保存先（既定: 教材フォルダの outputs/figures）")
@@ -469,6 +529,8 @@ def main() -> None:
         ("12_learning_curves.png", learning_curves),
         ("13_imbalanced_classification.png", imbalanced_classification),
         ("14_feature_importance.png", feature_importance),
+        ("15_text_classification.png", text_classification),
+        ("16_time_series.png", time_series),
     ]
     for filename, draw in figures:
         fig = draw()

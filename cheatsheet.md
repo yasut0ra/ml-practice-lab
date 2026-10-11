@@ -31,6 +31,13 @@
 | 不均衡な分類 | 種類ごとの件数が大きく違う分類。正解率だけでは読み違えやすい |
 | しきい値 | 予測確率がこの値以上なら陽性と判断する、という境目 |
 | Permutation Importance | 学習済みモデルで1列を入れ替え、成績の悪化を測る重要度 |
+| モデルの保存 | 学習済みの仕組みをファイルに残し、あとで読み込んで使うこと |
+| n-gram | 文章を、重なりのあるn文字などのかたまりに切ったもの |
+| TF-IDF | 文章内の出現回数と、多くの文章に共通するかを使って付ける重み |
+| macro F1 | 種類ごとのF1を、同じ重みで平均した値 |
+| 時系列 | 日付や時刻の順番を持つ記録 |
+| ラグ | 昨日や先週など、過去の値を今日の手がかりにした列 |
+| TimeSeriesSplit | 過去で学び、その後の期間で確かめるためのCVの分割 |
 
 ## 基本の流れ
 
@@ -74,6 +81,9 @@ from sklearn.model_selection import GridSearchCV, KFold
 from sklearn.decomposition import PCA
 from sklearn.model_selection import learning_curve
 from sklearn.inspection import permutation_importance
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import TimeSeriesSplit
+import joblib
 ```
 
 ## 教師あり学習
@@ -101,6 +111,7 @@ from sklearn.inspection import permutation_importance
 | 分類 | precision | 陽性と予測した中で本当に陽性の割合 |
 | 分類 | recall | 本当の陽性をどれだけ拾えたか |
 | 分類 | F1 | precision と recall の調和平均。高いほど良い |
+| 分類 | macro F1 | 各種類を対象にしたF1の単純平均。高いほど良い |
 | 分類 | ROC-AUC | 陽性を陰性より高いスコアにする力。1に近いほど良く、ランダムなら約0.5 |
 | クラスタリング | silhouette | 同じグループで近く、別グループから離れているか。-1〜1 |
 
@@ -193,6 +204,10 @@ DummyRegressorの予測は学習用の平均なので、テストでのR2がち�
 | `learning_curve(..., train_sizes=[0.2, ..., 1.0])` | CVの各回の学習側から使う割合を変える | [第14章](scripts/ch14_learning_curves.py) |
 | `probabilities >= threshold` | 同じモデルの確率に、判断の境目を当てる | [第15章](scripts/ch15_imbalanced_classification.py) |
 | `permutation_importance(..., n_repeats=10)` | 1列を入れ替え、成績を測る操作を列ごとに10回行う | [第16章](scripts/ch16_feature_importance.py) |
+| `joblib.dump(model, path)` / `joblib.load(path)` | 前処理を含めたモデルを保存／読み戻す。自分のファイルを同じ環境で使う | [第17章](scripts/ch17_model_persistence.py) |
+| `TfidfVectorizer(analyzer="char", ngram_range=(2, 3))` | 学習用の2〜3文字のかたまりを辞書にし、重みで数値にする | [第18章](scripts/ch18_text_classification.py) |
+| `sales.shift(1)` | 1行前の値を今日の行へ移す。この教材では昨日の値 | [第19章](scripts/ch19_time_series.py) |
+| `TimeSeriesSplit(n_splits=3, test_size=30)` | 過去の学習期間を伸ばし、その後の30行を検証する | [第19章の解答](answers/ch19_answer.py) |
 
 MAEとして説明するなら、最後の指標の符号を戻します。たとえばCVの平均が-0.8ならMAEは0.8です。
 単位は答えの単位と同じで、第13章では万円です。
