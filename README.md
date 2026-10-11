@@ -17,6 +17,7 @@
 3. [第0章の図解と演習](exercises/ch00_first_prediction.md)で、自分の予想と画面の数字を見比べる。
 
 [学習の道順と各章のゴール](docs/learning-path.md)で、次に何を学ぶか確認できます。
+[目的別の学習マップ](docs/coverage-map.md)から題材を選び、式が気になったら[数と学習の読み方](docs/math-intuition.md)へ進めます。
 
 前提は「Python のファイルを実行できること」です。数学の公式や機械学習の知識は、最初は必要ありません。
 Python も初めてなら、ガイドの[コードを読むための最低限の約束](docs/getting-started.md#コードを読むための最低限の約束)を先に見てください。
@@ -83,6 +84,9 @@ make answers
 │   ├── learning-path.md    # 学習順序・時間の目安・到達目標
 │   ├── experiment-log.md   # 予想・実験・考察を記録するノート
 │   ├── capstone.md         # 仕上げの総合課題
+│   ├── coverage-map.md     # 全28章の目的別の見取り図
+│   ├── math-intuition.md   # 平均・損失・重み・勾配の小さな例
+│   ├── model-card.md       # 用途・評価・限界を残すひな形
 │   └── images/            # 各章の図解（インストール不要で読めます）
 ├── datasets/
 │   ├── README.md
@@ -108,6 +112,14 @@ make answers
 │   ├── ch17_model_persistence.py
 │   ├── ch18_text_classification.py
 │   ├── ch19_time_series.py
+│   ├── ch20_feature_engineering.py
+│   ├── ch21_group_validation.py
+│   ├── ch22_gradient_boosting.py
+│   ├── ch23_neural_network.py
+│   ├── ch24_anomaly_detection.py
+│   ├── ch25_probability_calibration.py
+│   ├── ch26_prediction_intervals.py
+│   ├── ch27_monitoring.py
 │   ├── predict_saved_rent.py # 保存したモデルで予測だけ行う
 │   ├── make_rent_data.py   # 架空CSVの作り方・再生成
 │   ├── visualize.py       # 実際のデータをグラフにする
@@ -135,6 +147,8 @@ make answers
 第4〜6章で予測の確かめ方を学び、第7〜10章でさまざまな方法を比べます。
 第11〜19章は発展編です。設定選び・PCA・CSVでの予測に加え、データの件数、不均衡な分類、手がかりの重要度を調べます。
 モデルの保存と再利用、日本語の文章分類、時間順データの予測にも進めます。
+第20〜27章では、特徴量作り・人ごとの分割・ブースティング・ニューラルネットワークを学びます。
+さらに、異常検知・予測確率の校正・予測区間・利用開始後の監視まで扱います。
 基礎を一通り学んだら、興味のある章から取り組んで構いません。
 
 各章の「この章のゴール」が説明できたら先に進みます。
@@ -150,7 +164,7 @@ make answers
 Windows では `.venv\Scripts\python.exe scripts/visualize.py` を使います。
 `make` が使える場合は `make visuals` でも実行できます。
 
-`outputs/figures/` に16枚の PNG 画像ができます。画像を開いて、各章の説明と見比べてください。
+`outputs/figures/` に24枚の PNG 画像ができます。画像を開いて、各章の説明と見比べてください。
 画面を表示できない環境でも、画像ファイルとして保存できます。
 
 | 画像 | 見るポイント | 関連する章 |
@@ -171,6 +185,14 @@ Windows では `.venv\Scripts\python.exe scripts/visualize.py` を使います�
 | `14_feature_importance.png` | 1列を入れ替えると、家賃のずれが何万円増えるか | 16 |
 | `15_text_classification.png` | 問い合わせの分類結果と、文章から作った数値の一部 | 18 |
 | `16_time_series.png` | 日付順の境目と、翌日分の販売個数の予想のずれ | 19 |
+| `17_feature_engineering.png` | 同じ気温でも、2乗の列を作ると表せる曲線が変わる | 20 |
+| `18_group_validation.png` | 同じ人が学習用と検証用に重なると、成績を読み違える | 21 |
+| `19_gradient_boosting.png` | 単純な方法とのCV比較と、木を増やす途中の誤差 | 22 |
+| `20_neural_network.png` | 学習の損失と、内部の検証用の正解率は別の量 | 23 |
+| `21_anomaly_detection.png` | 実際の異常ラベルと、モデルが拾った候補の違い | 24 |
+| `22_probability_calibration.png` | 予想した確率と実際の割合、箱ごとの件数 | 25 |
+| `23_prediction_intervals.png` | 別のデータのずれで幅を決め、最終テストで確かめる | 26 |
+| `24_monitoring.png` | 入力の変化と、全体・地域別の誤差の変化 | 27 |
 
 日本語フォントがある環境では日本語で表示します。フォントがない場合は英語になり、
 各章の「グラフで見る」で対応する日本語を確認できます。
@@ -207,6 +229,21 @@ Windows では `.venv\Scripts\python.exe scripts/visualize.py` を使います�
 | 18 | 日本語の問い合わせを分類する | [コード](scripts/ch18_text_classification.py) | [図解と演習](exercises/ch18_text_classification.md) | [解答](answers/ch18_answer.py) |
 | 19 | 時間の順番を守って予測する | [コード](scripts/ch19_time_series.py) | [図解と演習](exercises/ch19_time_series.md) | [解答](answers/ch19_answer.py) |
 
+### 手がかり作りから、利用後の確認まで
+
+第5・6章の評価と前処理を土台に、目的に合った章を選んでください。
+
+| 章 | テーマ | 実行コード | 演習 | 解答 |
+| --- | --- | --- | --- | --- |
+| 20 | 手がかりの作り方を変える | [コード](scripts/ch20_feature_engineering.py) | [図解と演習](exercises/ch20_feature_engineering.md) | [解答](answers/ch20_answer.py) |
+| 21 | 同じ人の記録をまとめて分ける | [コード](scripts/ch21_group_validation.py) | [図解と演習](exercises/ch21_group_validation.md) | [解答](answers/ch21_answer.py) |
+| 22 | 小さな木で予想を少しずつ直す | [コード](scripts/ch22_gradient_boosting.py) | [図解と演習](exercises/ch22_gradient_boosting.md) | [解答](answers/ch22_answer.py) |
+| 23 | ニューラルネットワークで数字を読む | [コード](scripts/ch23_neural_network.py) | [図解と演習](exercises/ch23_neural_network.md) | [解答](answers/ch23_answer.py) |
+| 24 | いつもと違う記録を見つける | [コード](scripts/ch24_anomaly_detection.py) | [図解と演習](exercises/ch24_anomaly_detection.md) | [解答](answers/ch24_answer.py) |
+| 25 | 80%という予想を確かめる | [コード](scripts/ch25_probability_calibration.py) | [図解と演習](exercises/ch25_probability_calibration.md) | [解答](answers/ch25_answer.py) |
+| 26 | 予想を幅で伝える | [コード](scripts/ch26_prediction_intervals.py) | [図解と演習](exercises/ch26_prediction_intervals.md) | [解答](answers/ch26_answer.py) |
+| 27 | 使い始めたあとも確かめる | [コード](scripts/ch27_monitoring.py) | [図解と演習](exercises/ch27_monitoring.md) | [解答](answers/ch27_answer.py) |
+
 ## 使うデータ
 
 主に scikit-learn 付属データセットを使います。外部ダウンロードなしで動きます。
@@ -221,6 +258,14 @@ Windows では `.venv\Scripts\python.exe scripts/visualize.py` を使います�
 - `datasets/rent_practice.csv`: 読み込み・前処理・回帰の練習用の架空データ
 - `make_messages()`: 教材用に書いた48件の架空の日本語の問い合わせ
 - `make_sales()`: 曜日による波と増加を持つ210日分の架空の販売個数
+- `split_energy()`: 架空の気温と電力量320件
+- `make_students()`: 60人が4回ずつ記録した架空の学習データ
+- `make_inspections()`: 正常期間と異常を含む架空のセンサー測定値
+- 第25章の `make_classification`: 確率を確かめる人工データ1,000件
+- `make_market()`: 入力や家賃の関係が変わる状況を比べる架空の部屋データ
+
+データの行・列・単位・分割は[データの説明](datasets/README.md)にまとめています。
+使う目的と限界は[モデルカード](docs/model-card.md)へ記録できます。
 
 ## 学習メモ
 

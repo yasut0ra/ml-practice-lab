@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="650" viewBox="0 0 800 650" role="img" aria-labelledby="title desc">
+<title id="title">つながりの重みを学ぶ</title>
+<desc id="desc">数字の8×8画素は模式図。入力64列、中間32ユニット、出力0〜9の10種類を持つネットワークを、点と線の一部を省略して示す。重み付き合計とReLUで次の層に渡し、学習lossを減らすよう重みを更新する。内部検証で早期終了し、最終テストは停止判断に使わない。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#53708d"/></marker></defs>
+<rect width="800" height="650" rx="18" fill="white"/>
+<g font-family="'Hiragino Sans', 'Noto Sans JP', Meiryo, sans-serif" fill="#19324d">
+<text x="32" y="46" font-size="27" text-anchor="start" font-weight="600">つながりの重みを学ぶ</text>
+<text x="32" y="85" font-size="20" text-anchor="start">入力 → 中間の計算 → 0〜9のどれかを予想</text>
+<text x="142" y="139" font-size="22" text-anchor="middle" font-weight="600">入力64画素</text>
+<text x="421" y="139" font-size="22" text-anchor="middle" font-weight="600">中間32ユニット</text>
+<text x="668" y="139" font-size="22" text-anchor="middle" font-weight="600">出力10種類</text>
+<rect x="50" y="178" width="21" height="21" fill="#2765a1"/>
+<rect x="74" y="178" width="21" height="21" fill="#e0e8ee"/>
+<rect x="98" y="178" width="21" height="21" fill="#e0e8ee"/>
+<rect x="122" y="178" width="21" height="21" fill="#e0e8ee"/>
+<rect x="146" y="178" width="21" height="21" fill="#2765a1"/>
+<rect x="170" y="178" width="21" height="21" fill="#e0e8ee"/>
+<rect x="194" y="178" width="21" height="21" fill="#e0e8ee"/>
+<rect x="218" y="178" width="21" height="21" fill="#e0e8ee"/>
+<rect x="50" y="202" width="21" height="21" fill="#e0e8ee"/>
+<rect x="74" y="202" width="21" height="21" fill="#e0e8ee"/>
+<rect x="98" y="202" width="21" height="21" fill="#e0e8ee"/>
+<rect x="122" y="202" width="21" height="21" fill="#2765a1"/>
+<rect x="146" y="202" width="21" height="21" fill="#2765a1"/>
+<rect x="170" y="202" width="21" height="21" fill="#e0e8ee"/>
+<rect x="194" y="202" width="21" height="21" fill="#e0e8ee"/>
+<rect x="218" y="202" width="21" height="21" fill="#2765a1"/>
+<rect x="50" y="226" width="21" height="21" fill="#e0e8ee"/>
+<rect x="74" y="226" width="21" height="21" fill="#e0e8ee"/>
+<rect x="98" y="226" width="21" height="21" fill="#2765a1"/>
+<rect x="122" y="226" width="21" height="21" fill="#e0e8ee"/>
+<rect x="146" y="226" width="21" height="21" fill="#2765a1"/>
+<rect x="170" y="226" width="21" height="21" fill="#e0e8ee"/>
+<rect x="194" y="226" width="21" height="21" fill="#2765a1"/>
+<rect x="218" y="226" width="21" height="21" fill="#e0e8ee"/>
+<rect x="50" y="250" width="21" height="21" fill="#e0e8ee"/>
+<rect x="74" y="250" width="21" height="21" fill="#2765a1"/>
+<rect x="98" y="250" width="21" height="21" fill="#e0e8ee"/>
+<rect x="122" y="250" width="21" height="21" fill="#e0e8ee"/>
+<rect x="146" y="250" width="21" height="21" fill="#2765a1"/>
+<rect x="170" y="250" width="21" height="21" fill="#2765a1"/>
+<rect x="194" y="250" width="21" height="21" fill="#e0e8ee"/>
+<rect x="218" y="250" width="21" height="21" fill="#e0e8ee"/>
+<rect x="50" y="274" width="21" height="21" fill="#2765a1"/>
+<rect x="74" y="274" width="21" height="21" fill="#e0e8ee"/>
+<rect x="98" y="274" width="21" height="21" fill="#e0e8ee"/>
+<rect x="122" y="274" width="21" height="21" fill="#e0e8ee"/>
+<rect x="146" y="274" width="21" height="21" fill="#2765a1"/>
+<rect x="170" y="274" width="21" height="21" fill="#e0e8ee"/>
+<rect x="194" y="274" width="21" height="21" fill="#e0e8ee"/>
+<rect x="218" y="274" width="21" height="21" fill="#e0e8ee"/>
+<rect x="50" y="298" width="21" height="21" fill="#e0e8ee"/>
+<rect x="74" y="298" width="21" height="21" fill="#e0e8ee"/>
+<rect x="98" y="298" width="21" height="21" fill="#e0e8ee"/>
+<rect x="122" y="298" width="21" height="21" fill="#2765a1"/>
+<rect x="146" y="298" width="21" height="21" fill="#2765a1"/>
+<rect x="170" y="298" width="21" height="21" fill="#e0e8ee"/>
+<rect x="194" y="298" width="21" height="21" fill="#e0e8ee"/>
+<rect x="218" y="298" width="21" height="21" fill="#2765a1"/>
+<rect x="50" y="322" width="21" height="21" fill="#e0e8ee"/>
+<rect x="74" y="322" width="21" height="21" fill="#e0e8ee"/>
+<rect x="98" y="322" width="21" height="21" fill="#2765a1"/>
+<rect x="122" y="322" width="21" height="21" fill="#e0e8ee"/>
+<rect x="146" y="322" width="21" height="21" fill="#2765a1"/>
+<rect x="170" y="322" width="21" height="21" fill="#e0e8ee"/>
+<rect x="194" y="322" width="21" height="21" fill="#2765a1"/>
+<rect x="218" y="322" width="21" height="21" fill="#e0e8ee"/>
+<rect x="50" y="346" width="21" height="21" fill="#e0e8ee"/>
+<rect x="74" y="346" width="21" height="21" fill="#2765a1"/>
+<rect x="98" y="346" width="21" height="21" fill="#e0e8ee"/>
+<rect x="122" y="346" width="21" height="21" fill="#e0e8ee"/>
+<rect x="146" y="346" width="21" height="21" fill="#2765a1"/>
+<rect x="170" y="346" width="21" height="21" fill="#2765a1"/>
+<rect x="194" y="346" width="21" height="21" fill="#e0e8ee"/>
+<rect x="218" y="346" width="21" height="21" fill="#e0e8ee"/>
+<path d="M255,192 L416,190" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,192 L416,228" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,192 L416,266" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,192 L416,304" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,192 L416,342" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,230 L416,190" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,230 L416,228" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,230 L416,266" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,230 L416,304" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,230 L416,342" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,268 L416,190" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,268 L416,228" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,268 L416,266" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,268 L416,304" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,268 L416,342" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,306 L416,190" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,306 L416,228" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,306 L416,266" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,306 L416,304" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,306 L416,342" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,344 L416,190" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,344 L416,228" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,344 L416,266" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,344 L416,304" stroke="#b7cee5" stroke-width="1"/>
+<path d="M255,344 L416,342" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,190 L662,210" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,190 L662,252" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,190 L662,294" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,190 L662,336" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,228 L662,210" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,228 L662,252" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,228 L662,294" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,228 L662,336" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,266 L662,210" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,266 L662,252" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,266 L662,294" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,266 L662,336" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,304 L662,210" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,304 L662,252" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,304 L662,294" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,304 L662,336" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,342 L662,210" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,342 L662,252" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,342 L662,294" stroke="#b7cee5" stroke-width="1"/>
+<path d="M436,342 L662,336" stroke="#b7cee5" stroke-width="1"/>
+<circle cx="426" cy="190" r="17" fill="#28806b"/>
+<circle cx="426" cy="228" r="17" fill="#28806b"/>
+<circle cx="426" cy="266" r="17" fill="#28806b"/>
+<circle cx="426" cy="304" r="17" fill="#28806b"/>
+<circle cx="426" cy="342" r="17" fill="#28806b"/>
+<circle cx="672" cy="210" r="18" fill="#fff0d7" stroke="#b06a20"/>
+<text x="672" y="217" font-size="18" text-anchor="middle">0</text>
+<circle cx="672" cy="252" r="18" fill="#fff0d7" stroke="#b06a20"/>
+<text x="672" y="259" font-size="18" text-anchor="middle">1</text>
+<circle cx="672" cy="294" r="18" fill="#fff0d7" stroke="#b06a20"/>
+<text x="672" y="301" font-size="18" text-anchor="middle">2</text>
+<circle cx="672" cy="336" r="18" fill="#fff0d7" stroke="#b06a20"/>
+<text x="672" y="343" font-size="18" text-anchor="middle">3</text>
+<text x="142" y="403" font-size="19" text-anchor="middle">画素は模式図</text>
+<text x="426" y="403" font-size="19" text-anchor="middle">点は一部を省略</text>
+<text x="672" y="403" font-size="19" text-anchor="middle">0〜9の10種類</text>
+<rect x="32" y="437" width="736" height="102" rx="12" fill="#edf4fb"/>
+<text x="400" y="474" font-size="22" text-anchor="middle" font-weight="600">つながりの「重み」を、例から少しずつ更新する</text>
+<text x="400" y="513" font-size="21" text-anchor="middle">合計する → 曲げる処理（ReLU） → 次の層へ</text>
+<text x="400" y="579" font-size="21" text-anchor="middle">学習lossは小さいほど良い。正解率とは別の量。</text>
+<text x="400" y="617" font-size="20" text-anchor="middle">内部検証で止める。最終テストで止め方を決めない。</text>
+</g>
+</svg>

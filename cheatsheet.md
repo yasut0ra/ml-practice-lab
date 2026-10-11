@@ -38,6 +38,29 @@
 | 時系列 | 日付や時刻の順番を持つ記録 |
 | ラグ | 昨日や先週など、過去の値を今日の手がかりにした列 |
 | TimeSeriesSplit | 過去で学び、その後の期間で確かめるためのCVの分割 |
+| 特徴量エンジニアリング | 予測時点で使える入力から、役立つ列を作ること |
+| PolynomialFeatures | 入力の2乗や積などの列を作る道具 |
+| GroupKFold | 同じ人や物の記録をまとめ、学習側と検証側に重ねないCV |
+| ブースティング | 今の予想の誤差を補うモデルを順に加える方法 |
+| 学習率 | 一回の更新・修正をどのくらい反映するかの設定 |
+| ニューラルネットワーク / MLP | 重み付きの計算と非線形の変換を層でつなぎ、学習するモデル |
+| 重み／バイアス | 入力を足す係数／入力によらず足す値 |
+| ReLU | 負の値を0にし、0以上の値をそのまま通す変換 |
+| loss / 損失 | 学習中に小さくしたい量。正解率と同じとは限らない |
+| 勾配 | 重みを少し変えたときの損失の増え方。更新方向の手がかり |
+| 正則化 | ずれを減らすことに加え、重みなどの複雑さにも歯止めをかけること |
+| 早期停止 | 内部の検証用などを見て、上限より前に学習を止めること |
+| 異常検知 | 普段と違う例を候補として拾うこと。故障の断定とは別 |
+| IsolationForest | ランダムな分割で孤立しやすい例を異常側とする方法 |
+| contamination | IsolationForestでは学習用の何割を異常側へ振り分けるかの設定 |
+| 確率の校正 | 予想する確率と、同程度の確率の例で起きた割合の対応を整えること |
+| Brier score | 予想確率と実際の0/1の差の2乗の平均。小さいほど良い |
+| log_loss | 確率の採点。強く言い切って外す予想を重く扱う。小さいほど良い |
+| 予測区間 | 新しい一件の答えについて、予想に幅を付けたもの |
+| 信頼区間 | 平均や係数など、推定する量についての区間 |
+| 交換可能性 | 並べる順番を替えても同じ同時分布になる性質。独立で同じ分布から来る例はこれを満たす |
+| ドリフト | 利用開始後などにデータの分布や関係が変わること |
+| モデルカード | モデルの用途・データ・評価条件・限界を残す説明書 |
 
 ## 基本の流れ
 
@@ -83,6 +106,13 @@ from sklearn.model_selection import learning_curve
 from sklearn.inspection import permutation_importance
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import TimeSeriesSplit
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.model_selection import GroupKFold, GroupShuffleSplit
+from sklearn.ensemble import HistGradientBoostingRegressor, IsolationForest
+from sklearn.neural_network import MLPClassifier
+from sklearn.calibration import CalibratedClassifierCV
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import brier_score_loss, log_loss
 import joblib
 ```
 
@@ -114,6 +144,9 @@ import joblib
 | 分類 | macro F1 | 各種類を対象にしたF1の単純平均。高いほど良い |
 | 分類 | ROC-AUC | 陽性を陰性より高いスコアにする力。1に近いほど良く、ランダムなら約0.5 |
 | クラスタリング | silhouette | 同じグループで近く、別グループから離れているか。-1〜1 |
+| 二値分類の確率 | Brier | 確率と0/1の差の2乗の平均。校正だけを測る値ではない |
+| 二値分類の確率 | log_loss | 強く言い切った外れを重く見る。正解率とは別 |
+| 予測区間 | 入った割合・幅 | 目標と実測を分け、広さも合わせて読む |
 
 「陽性」は見つけたい対象です。[第4章の4マスの図](exercises/ch04_metrics.md)で、
 precision と recall の分母が違うことを確認できます。
@@ -174,6 +207,10 @@ model = Pipeline(
 | SVM | 小〜中規模データで強い | スケーリングが重要 |
 | k-NN | 直感的で簡単 | データ数が増えると遅い |
 | KMeans | クラスタリングの基準 | クラスタ数を指定する必要がある |
+| Ridge + PolynomialFeatures | 入力と答えの曲がった関係を試す | 次数・尺度・正則化を確認する |
+| HistGradientBoosting | 表データで木を順に足して予想を直す | 学習率・回数を単純な方法と同じCVで比べる |
+| MLPClassifier | 小さなニューラルネットワークを体験する | 尺度・幅・早期停止。内部検証とは別の評価も残す |
+| IsolationForest | ラベルなしで異常候補を拾う | 珍しいことと故障の違い、設定の評価を確認する |
 
 ## モデルより先に、単純な基準を作る
 
@@ -208,6 +245,14 @@ DummyRegressorの予測は学習用の平均なので、テストでのR2がち�
 | `TfidfVectorizer(analyzer="char", ngram_range=(2, 3))` | 学習用の2〜3文字のかたまりを辞書にし、重みで数値にする | [第18章](scripts/ch18_text_classification.py) |
 | `sales.shift(1)` | 1行前の値を今日の行へ移す。この教材では昨日の値 | [第19章](scripts/ch19_time_series.py) |
 | `TimeSeriesSplit(n_splits=3, test_size=30)` | 過去の学習期間を伸ばし、その後の30行を検証する | [第19章の解答](answers/ch19_answer.py) |
+| `PolynomialFeatures(degree=2, include_bias=False)` | 入力とその2乗・積の列を作る。土台の1の列は足さない | [第20章](scripts/ch20_feature_engineering.py) |
+| `GroupKFold(3).split(X, y, groups)` | 同じグループを学習側と検証側に重ねない | [第21章](scripts/ch21_group_validation.py) |
+| `HistGradientBoostingRegressor(learning_rate=0.1, max_iter=60)` | 修正の割合と、木を加える回数を指定する | [第22章](scripts/ch22_gradient_boosting.py) |
+| `hidden_layer_sizes=(32,)` | 中間層を一つ、ユニット32個にする | [第23章](scripts/ch23_neural_network.py) |
+| `model.predict(X) == -1` | IsolationForestの異常側を、候補のTrueにする | [第24章](scripts/ch24_anomaly_detection.py) |
+| `CalibratedClassifierCV(..., ensemble=False)` | 学習用内のCVの予想で校正し、基本モデルは全学習用で学ぶ | [第25章](scripts/ch25_probability_calibration.py) |
+| `ceil((n + 1) * coverage)` | この予測区間で使う、調整用のずれの順位を求める | [第26章](scripts/ch26_prediction_intervals.py) |
+| `labels.notna()` | 実際の答えが届いた行だけを採点する | [第27章](scripts/ch27_monitoring.py) |
 
 MAEとして説明するなら、最後の指標の符号を戻します。たとえばCVの平均が-0.8ならMAEは0.8です。
 単位は答えの単位と同じで、第13章では万円です。
@@ -215,6 +260,10 @@ MAEとして説明するなら、最後の指標の符号を戻します。た�
 これはMAEの増加（万円）なので、さらにマイナスを付けません。
 
 ## もう少し詳しく知りたいとき
+
+式を小さな数字で確認するなら[数と学習の読み方](docs/math-intuition.md)、
+各手法の関係を見たいなら[目的別の学習マップ](docs/coverage-map.md)へ進めます。
+実際に使うときの用途と限界は[モデルカード](docs/model-card.md)に残せます。
 
 英語ですが、次は scikit-learn の公式説明です。
 
