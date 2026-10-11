@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="650" viewBox="0 0 800 650" role="img" aria-labelledby="title desc">
+<title id="title">同じ入力から、新しい手がかりを作る</title>
+<desc id="desc">気温10度から、気温10と気温の2乗100という2列を作る。電力量の答えは入力に入れない。次数は学習用だけのCVで選び、選んだモデルを別の最終テストで確認する。直線だけでは表しづらい冷暖房の曲がった関係を示す模式図。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#53708d"/></marker></defs>
+<rect width="800" height="650" rx="18" fill="white"/>
+<g font-family="'Hiragino Sans', 'Noto Sans JP', Meiryo, sans-serif" fill="#19324d">
+<text x="32" y="46" font-size="27" text-anchor="start" font-weight="600">同じ入力から、新しい手がかりを作る</text>
+<text x="32" y="85" font-size="20" text-anchor="start">気温だけの直線では、冷暖房の曲がった関係が難しい</text>
+<rect x="32" y="115" width="736" height="88" rx="12" fill="#edf4fb"/>
+<text x="400" y="151" font-size="23" text-anchor="middle" font-weight="600">入力：気温10℃</text>
+<text x="400" y="184" font-size="20" text-anchor="middle">予想する時点でわかる値から計算する</text>
+<path d="M400,211 L400,250" stroke="#53708d" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+<rect x="160" y="264" width="480" height="105" rx="12" fill="#eaf5f0"/>
+<text x="400" y="303" font-size="25" text-anchor="middle" font-weight="600">気温 10 ／ 気温の2乗 100</text>
+<text x="400" y="343" font-size="20" text-anchor="middle">新しい測定なしで、列を増やせる</text>
+<path d="M400,377 L400,415" stroke="#53708d" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+<rect x="32" y="429" width="425" height="110" rx="12" fill="#edf4fb"/>
+<text x="244" y="468" font-size="22" text-anchor="middle" font-weight="600">1次・2次・3次をCVで比べる</text>
+<text x="244" y="507" font-size="20" text-anchor="middle">標準化も各回の学習側だけ</text>
+<rect x="497" y="429" width="271" height="110" rx="12" fill="#fff0d7"/>
+<text x="632" y="465" font-size="22" text-anchor="middle">選んだ一つを</text>
+<text x="632" y="507" font-size="22" text-anchor="middle" font-weight="600">最終テストへ</text>
+<path d="M465,483 L487,483" stroke="#53708d" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+<text x="400" y="587" font-size="21" text-anchor="middle">当日の実際の電力量は「答え」。入力に入れない。</text>
+<text x="400" y="621" font-size="20" text-anchor="middle">次数を増やせば必ず良いとは限らない。</text>
+</g>
+</svg>

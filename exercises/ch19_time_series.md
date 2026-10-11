@@ -136,7 +136,7 @@ CVで選ぶalpha=10の最終MAEは約4.95個です。サンプルより小さく
 
 </details>
 
-[解答例](../answers/ch19_answer.py) · [前の章](ch18_text_classification.md) · [総合課題](../docs/capstone.md) · [用語早見表](../cheatsheet.md) · [教材の入口](../README.md)
+[解答例](../answers/ch19_answer.py) · [前の章](ch18_text_classification.md) · [次の章](ch20_feature_engineering.md) · [総合課題](../docs/capstone.md) · [用語早見表](../cheatsheet.md) · [教材の入口](../README.md)
 
 分割の定義は[TimeSeriesSplitの公式説明](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html)、
 過去の値の使い方は[ラグを使った予測の公式例](https://scikit-learn.org/stable/auto_examples/applications/plot_time_series_lagged_features.html)を参照してください。

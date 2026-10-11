@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="665" viewBox="0 0 800 665" role="img" aria-labelledby="title desc">
+<title id="title">確率の予想と、実際の割合を合わせる</title>
+<desc id="desc">80%と予想した10件のうち8件が陽性なら、その集まりの実際の割合は80%という模式図。少ない箱では割合が揺れる。学習用内のCVで各行を学習しなかったモデルの予想を作り、その確率と答えで校正する。別の検証用で方法を選び、最後のテストを残す。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#53708d"/></marker></defs>
+<rect width="800" height="665" rx="18" fill="white"/>
+<g font-family="'Hiragino Sans', 'Noto Sans JP', Meiryo, sans-serif" fill="#19324d">
+<text x="32" y="46" font-size="27" text-anchor="start" font-weight="600">確率の予想と、実際の割合を合わせる</text>
+<text x="32" y="85" font-size="20" text-anchor="start">「80%と予想した例」を集め、実際の割合と比べる</text>
+<rect x="32" y="115" width="736" height="181" rx="12" fill="#edf4fb"/>
+<text x="400" y="155" font-size="24" text-anchor="middle" font-weight="600">仕組みの例：80%の予想が10件</text>
+<circle cx="85" cy="213" r="19" fill="#2765a1" stroke="#2765a1" stroke-width="2"/>
+<circle cx="155" cy="213" r="19" fill="#2765a1" stroke="#2765a1" stroke-width="2"/>
+<circle cx="225" cy="213" r="19" fill="#2765a1" stroke="#2765a1" stroke-width="2"/>
+<circle cx="295" cy="213" r="19" fill="#2765a1" stroke="#2765a1" stroke-width="2"/>
+<circle cx="365" cy="213" r="19" fill="#2765a1" stroke="#2765a1" stroke-width="2"/>
+<circle cx="435" cy="213" r="19" fill="#2765a1" stroke="#2765a1" stroke-width="2"/>
+<circle cx="505" cy="213" r="19" fill="#2765a1" stroke="#2765a1" stroke-width="2"/>
+<circle cx="575" cy="213" r="19" fill="#2765a1" stroke="#2765a1" stroke-width="2"/>
+<circle cx="645" cy="213" r="19" fill="white" stroke="#2765a1" stroke-width="2"/>
+<circle cx="715" cy="213" r="19" fill="white" stroke="#2765a1" stroke-width="2"/>
+<text x="400" y="268" font-size="21" text-anchor="middle">青8件は陽性、白2件は陰性 → 実際は80%</text>
+<text x="400" y="334" font-size="20" text-anchor="middle">実際の少ない箱では、割合が大きく揺れることもある</text>
+<rect x="32" y="365" width="736" height="109" rx="12" fill="#eaf5f0"/>
+<text x="400" y="405" font-size="21" text-anchor="middle" font-weight="600">学習用のCVで、自分を学習していない予想を作る</text>
+<text x="400" y="443" font-size="20" text-anchor="middle">その確率と答えで「校正」を学ぶ → 別の検証用で選ぶ</text>
+<path d="M400,482 L400,519" stroke="#53708d" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+<rect x="162" y="533" width="476" height="64" rx="12" fill="#fff0d7"/>
+<text x="400" y="573" font-size="22" text-anchor="middle" font-weight="600">選んだ一つを、最終テストで確認</text>
+<text x="400" y="634" font-size="21" text-anchor="middle">80%は、一件の正しさを保証する数字ではない。</text>
+</g>
+</svg>

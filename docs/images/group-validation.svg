@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="670" viewBox="0 0 800 670" role="img" aria-labelledby="title desc">
+<title id="title">同じ人の記録は、まとめて分ける</title>
+<desc id="desc">3人が4件ずつ持つ記録の分割の模式図。行を混ぜると同じ人の記録が学習と検証の両方に入る。人ごとの分割ではAとBを学習、Cを検証にし、重複しない。実行例は60人240行で、新しい12人を最終テストに残す。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#53708d"/></marker></defs>
+<rect width="800" height="670" rx="18" fill="white"/>
+<g font-family="'Hiragino Sans', 'Noto Sans JP', Meiryo, sans-serif" fill="#19324d">
+<text x="32" y="46" font-size="27" text-anchor="start" font-weight="600">同じ人の記録は、まとめて分ける</text>
+<text x="32" y="85" font-size="20" text-anchor="start">目的：記録のない新しい人を予想する</text>
+<rect x="32" y="112" width="344" height="344" rx="12" fill="#edf4fb"/>
+<rect x="424" y="112" width="344" height="344" rx="12" fill="#edf4fb"/>
+<text x="204" y="150" font-size="22" text-anchor="middle" font-weight="600">行を混ぜて分ける</text>
+<text x="596" y="150" font-size="22" text-anchor="middle" font-weight="600">人ごとに分ける</text>
+<text x="68" y="217" font-size="24" text-anchor="middle" font-weight="600">A</text>
+<rect x="99" y="182" width="54" height="53" rx="12" fill="#c6e5d6"/>
+<text x="126" y="215" font-size="18" text-anchor="middle">A1</text>
+<rect x="161" y="182" width="54" height="53" rx="12" fill="#bfd7ed"/>
+<text x="188" y="215" font-size="18" text-anchor="middle">A2</text>
+<rect x="223" y="182" width="54" height="53" rx="12" fill="#bfd7ed"/>
+<text x="250" y="215" font-size="18" text-anchor="middle">A3</text>
+<rect x="285" y="182" width="54" height="53" rx="12" fill="#c6e5d6"/>
+<text x="312" y="215" font-size="18" text-anchor="middle">A4</text>
+<text x="460" y="217" font-size="24" text-anchor="middle" font-weight="600">A</text>
+<rect x="491" y="182" width="54" height="53" rx="12" fill="#bfd7ed"/>
+<text x="518" y="215" font-size="18" text-anchor="middle">A1</text>
+<rect x="553" y="182" width="54" height="53" rx="12" fill="#bfd7ed"/>
+<text x="580" y="215" font-size="18" text-anchor="middle">A2</text>
+<rect x="615" y="182" width="54" height="53" rx="12" fill="#bfd7ed"/>
+<text x="642" y="215" font-size="18" text-anchor="middle">A3</text>
+<rect x="677" y="182" width="54" height="53" rx="12" fill="#bfd7ed"/>
+<text x="704" y="215" font-size="18" text-anchor="middle">A4</text>
+<text x="68" y="303" font-size="24" text-anchor="middle" font-weight="600">B</text>
+<rect x="99" y="268" width="54" height="53" rx="12" fill="#bfd7ed"/>
+<text x="126" y="301" font-size="18" text-anchor="middle">B1</text>
+<rect x="161" y="268" width="54" height="53" rx="12" fill="#bfd7ed"/>
+<text x="188" y="301" font-size="18" text-anchor="middle">B2</text>
+<rect x="223" y="268" width="54" height="53" rx="12" fill="#c6e5d6"/>
+<text x="250" y="301" font-size="18" text-anchor="middle">B3</text>
+<rect x="285" y="268" width="54" height="53" rx="12" fill="#bfd7ed"/>
+<text x="312" y="301" font-size="18" text-anchor="middle">B4</text>
+<text x="460" y="303" font-size="24" text-anchor="middle" font-weight="600">B</text>
+<rect x="491" y="268" width="54" height="53" rx="12" fill="#bfd7ed"/>
+<text x="518" y="301" font-size="18" text-anchor="middle">B1</text>
+<rect x="553" y="268" width="54" height="53" rx="12" fill="#bfd7ed"/>
+<text x="580" y="301" font-size="18" text-anchor="middle">B2</text>
+<rect x="615" y="268" width="54" height="53" rx="12" fill="#bfd7ed"/>
+<text x="642" y="301" font-size="18" text-anchor="middle">B3</text>
+<rect x="677" y="268" width="54" height="53" rx="12" fill="#bfd7ed"/>
+<text x="704" y="301" font-size="18" text-anchor="middle">B4</text>
+<text x="68" y="389" font-size="24" text-anchor="middle" font-weight="600">C</text>
+<rect x="99" y="354" width="54" height="53" rx="12" fill="#bfd7ed"/>
+<text x="126" y="387" font-size="18" text-anchor="middle">C1</text>
+<rect x="161" y="354" width="54" height="53" rx="12" fill="#c6e5d6"/>
+<text x="188" y="387" font-size="18" text-anchor="middle">C2</text>
+<rect x="223" y="354" width="54" height="53" rx="12" fill="#bfd7ed"/>
+<text x="250" y="387" font-size="18" text-anchor="middle">C3</text>
+<rect x="285" y="354" width="54" height="53" rx="12" fill="#bfd7ed"/>
+<text x="312" y="387" font-size="18" text-anchor="middle">C4</text>
+<text x="460" y="389" font-size="24" text-anchor="middle" font-weight="600">C</text>
+<rect x="491" y="354" width="54" height="53" rx="12" fill="#c6e5d6"/>
+<text x="518" y="387" font-size="18" text-anchor="middle">C1</text>
+<rect x="553" y="354" width="54" height="53" rx="12" fill="#c6e5d6"/>
+<text x="580" y="387" font-size="18" text-anchor="middle">C2</text>
+<rect x="615" y="354" width="54" height="53" rx="12" fill="#c6e5d6"/>
+<text x="642" y="387" font-size="18" text-anchor="middle">C3</text>
+<rect x="677" y="354" width="54" height="53" rx="12" fill="#c6e5d6"/>
+<text x="704" y="387" font-size="18" text-anchor="middle">C4</text>
+<text x="204" y="432" font-size="20" text-anchor="middle">同じ人が両側にいる</text>
+<text x="596" y="432" font-size="20" text-anchor="middle">同じ人が両側にいない</text>
+<rect x="108" y="478" width="226" height="48" rx="12" fill="#bfd7ed"/>
+<text x="221" y="510" font-size="20" text-anchor="middle">青：学習に使う</text>
+<rect x="466" y="478" width="226" height="48" rx="12" fill="#c6e5d6"/>
+<text x="579" y="510" font-size="20" text-anchor="middle">緑：検証に使う</text>
+<text x="400" y="566" font-size="20" text-anchor="middle">一つの分割の模式図。実行では48人を3分割。</text>
+<text x="400" y="605" font-size="21" text-anchor="middle">240行は60人分の記録。行の件数と人数は別。</text>
+<text x="400" y="639" font-size="20" text-anchor="middle">番号は分割に使い、予想の手がかりには入れない。</text>
+</g>
+</svg>

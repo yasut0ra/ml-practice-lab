@@ -1,4 +1,4 @@
-"""実際のデータを16枚の図にする。実行: .venv/bin/python scripts/visualize.py"""
+"""実際のデータを24枚の図にする。実行: .venv/bin/python scripts/visualize.py"""
 
 from __future__ import annotations
 
@@ -35,6 +35,14 @@ from ch15_imbalanced_classification import build_model as build_inspection_model
 from ch16_feature_importance import importance_table, split_rooms
 from ch18_text_classification import LABELS, build_model as build_text_model, split_messages
 from ch19_time_series import build_model as build_sales_model, make_sales, split_sales
+from ch20_feature_engineering import build_model as build_energy_model, choose_degree, compare_degrees, split_energy
+from ch21_group_validation import split_comparison, split_students
+from ch22_gradient_boosting import build_boosting, compare_models as compare_boosting, split_rooms as split_boosting
+from ch23_neural_network import build_model as build_network, split_digits
+from ch24_anomaly_detection import choose_candidate, compare_candidates, split_inspections
+from ch25_probability_calibration import calibration_table, compare_models as compare_calibration, split_events
+from ch26_prediction_intervals import conformal_radius, split_rooms as split_intervals
+from ch27_monitoring import monitoring_data, summarize_batch
 
 
 COLORS = ["#2765a1", "#28806b", "#b06a20"]
@@ -505,8 +513,171 @@ def time_series() -> plt.Figure:
     return fig
 
 
+def feature_engineering() -> plt.Figure:
+    X_train, X_test, y_train, y_test = split_energy()
+    table = compare_degrees(X_train, y_train)
+    degree = choose_degree(table)
+    fig, axes = plt.subplots(1, 2, figsize=(11, 5), layout="constrained")
+    axes[0].bar(table["degree"].astype(str), table["CV_MAE_kwh"], color=COLORS[0])
+    axes[0].set(xlabel=caption("次数", "Degree"), ylabel="CV MAE (kWh)",
+                title=caption("学習用だけで列の作り方を選ぶ", "Choose features using training CV"))
+    grid = X_train.iloc[:200].copy().sort_values("temperature_c")
+    axes[1].scatter(X_test["temperature_c"], y_test, s=20, alpha=0.55, label=caption("テストの答え", "Test observations"))
+    for d, color in [(1, COLORS[2]), (degree, COLORS[1])]:
+        model = build_energy_model(d).fit(X_train, y_train)
+        axes[1].plot(grid["temperature_c"], model.predict(grid), color=color,
+                     label=caption(f"{d}次の予想", f"Degree {d}"))
+    axes[1].set(xlabel=caption("気温（℃）", "Temperature (C)"), ylabel=caption("電力量（kWh）", "Energy (kWh)"),
+                title=caption("気温の2乗で曲がった関係を表す", "A squared feature can express a curve"))
+    axes[1].legend()
+    return fig
+
+
+def group_validation() -> plt.Figure:
+    train, _ = split_students()
+    result = split_comparison(train)
+    fig, ax = plt.subplots(figsize=(8, 5), layout="constrained")
+    names = [caption("行を混ぜる", "Random rows"), caption("人ごとに分ける", "Separate people")]
+    bars = ax.bar(names, result["CV_MAE"], color=COLORS[:2])
+    ax.bar_label(bars, fmt="%.2f", padding=5)
+    ax.set_ylim(0, result["CV_MAE"].max() * 1.25)
+    ax.set(ylabel=caption("CVのMAE（点）", "CV MAE (points)"),
+           title=caption("同じ48人の学習用で、分け方だけを変える", "Same 48 training people, different splits"))
+    overlap = int(result["重なる人数の最大"].iloc[0])
+    ax.set_xlabel(caption(f"同じ人の重なり：左は最大{overlap}人、右は0人", f"Shared people: up to {overlap} on the left, zero on the right"))
+    return fig
+
+
+def gradient_boosting() -> plt.Figure:
+    from sklearn.dummy import DummyRegressor
+    from sklearn.metrics import mean_absolute_error
+    from sklearn.model_selection import KFold
+    X_train, _, y_train, _ = split_boosting()
+    table = compare_boosting(X_train, y_train, {"Mean": DummyRegressor(), "Ridge": build_rent_model(), "Boosting": build_boosting()})
+    fig, axes = plt.subplots(1, 2, figsize=(11, 5), layout="constrained")
+    names = [caption("平均", "Mean"), "Ridge", caption("ブースティング", "Boosting")]
+    axes[0].bar(names, table["CV_MAE_man"], color=COLORS)
+    axes[0].set(ylabel=caption("CVのMAE（万円）", "CV MAE (10,000 JPY)"),
+                title=caption("同じCVで方法を比べる", "Compare methods on the same CV folds"))
+    a, b = next(KFold(n_splits=5, shuffle=True, random_state=42).split(X_train))
+    model = build_boosting().fit(X_train.iloc[a], y_train.iloc[a])
+    prepare, reg = model.named_steps["prepare"], model.named_steps["reg"]
+    for indices, label, color in [(a, caption("学習用", "Training"), COLORS[0]), (b, caption("検証用", "Validation"), COLORS[1])]:
+        errors = [mean_absolute_error(y_train.iloc[indices], pred) for pred in reg.staged_predict(prepare.transform(X_train.iloc[indices]))]
+        axes[1].plot(range(1, len(errors) + 1), errors, color=color, label=label)
+    axes[1].set(xlabel=caption("小さな木を足す回数", "Boosting iterations"),
+                ylabel=caption("MAE（万円）", "MAE (10,000 JPY)"),
+                title=caption("一つのCV分割で見る修正過程", "Corrections within one CV split"))
+    axes[1].legend()
+    return fig
+
+
+def neural_network() -> plt.Figure:
+    X_train, _, y_train, _ = split_digits()
+    network = build_network().fit(X_train, y_train).named_steps["network"]
+    epochs = np.arange(1, network.n_iter_ + 1)
+    fig, axes = plt.subplots(1, 2, figsize=(11, 5), layout="constrained")
+    axes[0].plot(epochs, network.loss_curve_, color=COLORS[0])
+    axes[0].set(ylabel=caption("学習loss（小さいほど良い）", "Training loss (lower is better)"),
+                title=caption("重みを更新した学習の記録", "History of training updates"))
+    axes[1].plot(epochs, network.validation_scores_, color=COLORS[1])
+    axes[1].axvline(int(np.argmax(network.validation_scores_)) + 1, linestyle="--", color=COLORS[2],
+                   label=caption("内部検証の最高値の最初の回", "First epoch with best internal score"))
+    axes[1].set(ylabel=caption("内部検証の正解率", "Internal validation accuracy"),
+                title=caption("最終テストの履歴ではない", "This is not final-test history"))
+    axes[1].legend(fontsize=10)
+    for ax in axes:
+        ax.set_xlabel(caption("学習を繰り返した回数", "Epoch"))
+    return fig
+
+
+def anomaly_detection() -> plt.Figure:
+    X_train, X_valid, _, y_valid, _ = split_inspections()
+    models, table = compare_candidates(X_train, X_valid, y_valid)
+    flagged = (models[choose_candidate(table)].predict(X_valid) == -1).astype(int)
+    fig, axes = plt.subplots(1, 2, figsize=(11, 5), layout="constrained")
+    for ax, labels, title in [(axes[0], y_valid.to_numpy(), caption("検証用100件の正解", "Ground truth on 100 validation examples")),
+                              (axes[1], flagged, caption("選んだモデルの異常候補", "Flags from the selected model"))]:
+        for value, marker, color, name in [(0, "o", COLORS[0], caption("通常側", "Usual")), (1, "^", COLORS[2], caption("異常側・候補", "Unusual or flagged"))]:
+            subset = X_valid.iloc[np.flatnonzero(labels == value)]
+            ax.scatter(subset["sensor_a"], subset["sensor_b"], marker=marker, color=color, alpha=0.75, label=name)
+        ax.set(xlabel=caption("測定値A（架空の尺度）", "Sensor A (artificial scale)"),
+               ylabel=caption("測定値B（架空の尺度）", "Sensor B (artificial scale)"), title=title)
+        ax.legend()
+    return fig
+
+
+def probability_calibration() -> plt.Figure:
+    X_train, X_valid, _, y_train, y_valid, _ = split_events()
+    models, _ = compare_calibration(X_train, y_train, X_valid, y_valid)
+    fig, axes = plt.subplots(1, 2, figsize=(11, 5), layout="constrained")
+    for (name, model), color in zip(models.items(), COLORS):
+        probabilities = model.predict_proba(X_valid)[:, 1]
+        table = calibration_table(y_valid, probabilities)
+        label = caption("校正前", "Raw") if name == "raw" else caption("校正後", "Sigmoid")
+        axes[0].plot(table["mean_probability"], table["observed_rate"], marker="o", color=color, label=label)
+        axes[1].hist(probabilities, bins=np.linspace(0, 1, 6), histtype="step", linewidth=2, color=color, label=label)
+    axes[0].plot([0, 1], [0, 1], linestyle="--", color=COLORS[2], label=caption("一致する目安", "Ideal agreement"))
+    axes[0].set(xlim=(0, 1), ylim=(0, 1), xlabel=caption("予想確率の平均", "Mean predicted probability"),
+                ylabel=caption("実際の陽性割合", "Observed positive fraction"),
+                title=caption("検証用の校正曲線：件数も見る", "Validation reliability: also check counts"))
+    axes[1].set(xlabel=caption("予想確率", "Predicted probability"), ylabel=caption("件数", "Count"),
+                title=caption("少ない箱の割合は揺れやすい", "Small bins have uncertain fractions"))
+    for ax in axes:
+        ax.legend(fontsize=10)
+    return fig
+
+
+def prediction_intervals() -> plt.Figure:
+    X_train, X_cal, X_test, y_train, y_cal, y_test = split_intervals()
+    model = build_rent_model().fit(X_train, y_train)
+    errors = np.abs(y_cal - model.predict(X_cal))
+    radius = conformal_radius(errors, 0.9)
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5), layout="constrained")
+    axes[0].plot(np.arange(1, 31), np.sort(errors), marker="o", color=COLORS[0])
+    axes[0].axvline(28, linestyle="--", color=COLORS[2])
+    axes[0].axhline(radius, linestyle="--", color=COLORS[2])
+    axes[0].set(xlabel=caption("ずれを小さい順に並べた順位", "Rank of sorted calibration errors"),
+                ylabel=caption("ずれ（万円）", "Error (10,000 JPY)"),
+                title=caption("90%目標の半幅は28番目のずれ", "Rank 28 defines the radius for a 90% target"))
+    pred = model.predict(X_test)
+    rows = np.arange(1, len(y_test) + 1)
+    axes[1].errorbar(rows, pred, yerr=radius, fmt="o", markersize=3, color=COLORS[1], alpha=0.6,
+                      capsize=2, label=caption("予想と区間", "Prediction with interval"))
+    axes[1].scatter(rows, y_test, s=18, color=COLORS[2], label=caption("実際の答え", "Actual"))
+    axes[1].set(xlabel=caption("最終テストの表示順", "Final-test display order"),
+                ylabel=caption("家賃（万円）", "Rent (10,000 JPY)"),
+                title=caption("テストの答えが幅の中に入ったか", "Does the held-out target fall inside?"))
+    axes[1].legend(fontsize=10)
+    return fig
+
+
+def monitoring() -> plt.Figure:
+    X_train, y_train, batches = monitoring_data()
+    model = build_rent_model().fit(X_train, y_train)
+    reference_area = batches["reference"][0]["area_sqm"].mean()
+    reports = {name: summarize_batch(model, X, y, reference_area, name) for name, (X, y) in batches.items()}
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5), layout="constrained")
+    for name, color, label in [("reference", COLORS[0], caption("基準の状況", "Reference")),
+                               ("input_shift", COLORS[1], caption("新しい入力", "Shifted inputs"))]:
+        axes[0].hist(batches[name][0]["area_sqm"], bins=np.arange(15, 91, 5), histtype="step", linewidth=2, color=color, label=label)
+    axes[0].set(xlabel=caption("広さ（㎡）", "Area (square metres)"), ylabel=caption("件数", "Count"),
+                title=caption("答えがなくても、入力の変化は見える", "Input changes are visible before labels arrive"))
+    names = [caption("基準", "Reference"), caption("入力だけ変化", "Input shift"), caption("関係も変化", "Relationship shift")]
+    positions = np.arange(3)
+    for number, (name, report) in enumerate(reports.items()):
+        axes[1].bar(positions + (number - 1) * 0.25, report["MAE_man"], width=0.25, color=COLORS[number], label=names[number])
+    axes[1].axhline(1.5, linestyle="--", color="#53708d")
+    axes[1].set_xticks(positions, [caption("全体", "All"), caption("中心部", "Central"), caption("郊外", "Suburb")])
+    axes[1].set(ylabel=caption("MAE（万円）", "MAE (10,000 JPY)"),
+                title=caption("精度は実際の答えが来てから確かめる", "Measure accuracy once labels arrive"))
+    axes[0].legend(fontsize=9)
+    axes[1].legend(loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=3, fontsize=9)
+    return fig
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="教材のデータを16枚のPNGグラフにして保存します。")
+    parser = argparse.ArgumentParser(description="教材のデータを24枚のPNGグラフにして保存します。")
     parser.add_argument("--output-dir", type=Path,
                         default=Path(__file__).resolve().parents[1] / "outputs" / "figures",
                         help="画像の保存先（既定: 教材フォルダの outputs/figures）")
@@ -531,6 +702,14 @@ def main() -> None:
         ("14_feature_importance.png", feature_importance),
         ("15_text_classification.png", text_classification),
         ("16_time_series.png", time_series),
+        ("17_feature_engineering.png", feature_engineering),
+        ("18_group_validation.png", group_validation),
+        ("19_gradient_boosting.png", gradient_boosting),
+        ("20_neural_network.png", neural_network),
+        ("21_anomaly_detection.png", anomaly_detection),
+        ("22_probability_calibration.png", probability_calibration),
+        ("23_prediction_intervals.png", prediction_intervals),
+        ("24_monitoring.png", monitoring),
     ]
     for filename, draw in figures:
         fig = draw()

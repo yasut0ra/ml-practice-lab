@@ -27,6 +27,14 @@ CHAPTERS = [
     "ch17_model_persistence.py",
     "ch18_text_classification.py",
     "ch19_time_series.py",
+    "ch20_feature_engineering.py",
+    "ch21_group_validation.py",
+    "ch22_gradient_boosting.py",
+    "ch23_neural_network.py",
+    "ch24_anomaly_detection.py",
+    "ch25_probability_calibration.py",
+    "ch26_prediction_intervals.py",
+    "ch27_monitoring.py",
 ]
 
 

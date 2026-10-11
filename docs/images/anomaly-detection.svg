@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="650" viewBox="0 0 800 650" role="img" aria-labelledby="title desc">
+<title id="title">いつもと違う記録を、確認の入口にする</title>
+<desc id="desc">普段の記録の点はまとまり、離れた記録は少ない切り分けで孤立する、IsolationForestの考え方の模式図。正常期間の入力だけで学び、1を通常側、マイナス1を異常候補として予想する。珍しいことと故障の証明は別で、候補の理由を人が確認する。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#53708d"/></marker></defs>
+<rect width="800" height="650" rx="18" fill="white"/>
+<g font-family="'Hiragino Sans', 'Noto Sans JP', Meiryo, sans-serif" fill="#19324d">
+<text x="32" y="46" font-size="27" text-anchor="start" font-weight="600">いつもと違う記録を、確認の入口にする</text>
+<text x="32" y="85" font-size="20" text-anchor="start">正常期間の記録を使って「普段の範囲」を学ぶ</text>
+<rect x="32" y="112" width="736" height="291" rx="12" fill="#edf4fb"/>
+<text x="225" y="150" font-size="22" text-anchor="middle" font-weight="600">普段のまとまり</text>
+<text x="632" y="150" font-size="22" text-anchor="middle" font-weight="600">離れた記録</text>
+<circle cx="123" cy="215" r="11" fill="#2765a1" opacity="0.8"/>
+<circle cx="162" cy="257" r="11" fill="#2765a1" opacity="0.8"/>
+<circle cx="186" cy="204" r="11" fill="#2765a1" opacity="0.8"/>
+<circle cx="203" cy="302" r="11" fill="#2765a1" opacity="0.8"/>
+<circle cx="231" cy="241" r="11" fill="#2765a1" opacity="0.8"/>
+<circle cx="270" cy="211" r="11" fill="#2765a1" opacity="0.8"/>
+<circle cx="300" cy="278" r="11" fill="#2765a1" opacity="0.8"/>
+<circle cx="136" cy="307" r="11" fill="#2765a1" opacity="0.8"/>
+<circle cx="269" cy="329" r="11" fill="#2765a1" opacity="0.8"/>
+<circle cx="331" cy="228" r="11" fill="#2765a1" opacity="0.8"/>
+<path d="M582,193 l-13,25 h26 Z" fill="#b06a20"/>
+<path d="M638,241 l-13,25 h26 Z" fill="#b06a20"/>
+<path d="M701,203 l-13,25 h26 Z" fill="#b06a20"/>
+<text x="230" y="378" font-size="19" text-anchor="middle">多くの切り分けが必要</text>
+<text x="632" y="378" font-size="19" text-anchor="middle">少ない切り分けで孤立</text>
+<path d="M400,412 L400,449" stroke="#53708d" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+<rect x="32" y="463" width="736" height="73" rx="12" fill="#eaf5f0"/>
+<text x="400" y="507" font-size="23" text-anchor="middle" font-weight="600">予想：1は通常側、−1は異常候補</text>
+<text x="400" y="577" font-size="21" text-anchor="middle">ラベルは学習に渡さず、設定選びと評価に使う。</text>
+<text x="400" y="616" font-size="21" text-anchor="middle">異常の候補 ≠ 故障の証明。人が理由を確認する。</text>
+</g>
+</svg>

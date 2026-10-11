@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="650" viewBox="0 0 800 650" role="img" aria-labelledby="title desc">
+<title id="title">点の予想を、幅を持つ予想にする</title>
+<desc id="desc">仕組みの例は予想10万円、半幅2万円、下限8万円、上限12万円。実行では学習60件で固定したモデルを使い、別の調整用30件の絶対誤差の小さい方から28番目を90%目標の半幅にする。最終テスト30件で幅に答えが入る割合を測る。目標は各部屋や今回の30件での保証ではない。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#53708d"/></marker></defs>
+<rect width="800" height="650" rx="18" fill="white"/>
+<g font-family="'Hiragino Sans', 'Noto Sans JP', Meiryo, sans-serif" fill="#19324d">
+<text x="32" y="46" font-size="27" text-anchor="start" font-weight="600">点の予想を、幅を持つ予想にする</text>
+<text x="32" y="85" font-size="20" text-anchor="start">仕組みの例：予想10万円 ±2万円（実行の幅とは別）</text>
+<rect x="32" y="112" width="736" height="177" rx="12" fill="#edf4fb"/>
+<path d="M174,199 H626" stroke="#28806b" stroke-width="8"/>
+<path d="M174,176 V222 M626,176 V222" stroke="#28806b" stroke-width="3"/>
+<circle cx="400" cy="199" r="12" fill="#2765a1"/>
+<text x="174" y="260" font-size="21" text-anchor="middle">下限8万円</text>
+<text x="400" y="155" font-size="22" text-anchor="middle" font-weight="600">予想10万円</text>
+<text x="626" y="260" font-size="21" text-anchor="middle">上限12万円</text>
+<rect x="32" y="327" width="205" height="112" rx="12" fill="#edf4fb"/>
+<text x="134" y="366" font-size="22" text-anchor="middle" font-weight="600">学習60件</text>
+<text x="134" y="408" font-size="20" text-anchor="middle">モデルを固定</text>
+<rect x="292" y="327" width="216" height="112" rx="12" fill="#eaf5f0"/>
+<text x="400" y="366" font-size="22" text-anchor="middle" font-weight="600">調整30件</text>
+<text x="400" y="408" font-size="20" text-anchor="middle">ずれから幅を決定</text>
+<rect x="563" y="327" width="205" height="112" rx="12" fill="#fff0d7"/>
+<text x="665" y="366" font-size="21" text-anchor="middle" font-weight="600">最終テスト30件</text>
+<text x="665" y="408" font-size="20" text-anchor="middle">幅に入った割合</text>
+<path d="M246,382 L282,382" stroke="#53708d" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+<path d="M518,382 L553,382" stroke="#53708d" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+<text x="400" y="486" font-size="21" text-anchor="middle">90%目標：30件のずれの、小さい方から28番目</text>
+<text x="400" y="532" font-size="20" text-anchor="middle">学習・幅の調整・最後の採点を、別のデータで行う。</text>
+<text x="400" y="578" font-size="20" text-anchor="middle">同じ分布から来る新しい例についての全体の目標。</text>
+<text x="400" y="619" font-size="20" text-anchor="middle">各部屋・各地域や、今回の30件での保証ではない。</text>
+</g>
+</svg>

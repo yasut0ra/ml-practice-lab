@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="650" viewBox="0 0 800 650" role="img" aria-labelledby="title desc">
+<title id="title">小さな木で、予想を少しずつ直す</title>
+<desc id="desc">仕組みを示す架空の予想。答え10に対し最初の予想6、修正2を足して8、さらに修正1を足して9になる。二乗誤差の回帰では、予想のずれを直す小さな木を順番に足す。学習率と回数は学習用のCVで選び、最終テストは残す。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#53708d"/></marker></defs>
+<rect width="800" height="650" rx="18" fill="white"/>
+<g font-family="'Hiragino Sans', 'Noto Sans JP', Meiryo, sans-serif" fill="#19324d">
+<text x="32" y="46" font-size="27" text-anchor="start" font-weight="600">小さな木で、予想を少しずつ直す</text>
+<text x="32" y="85" font-size="20" text-anchor="start">二乗誤差の回帰：今の予想のずれを、小さな木で直す</text>
+<rect x="32" y="115" width="736" height="64" rx="12" fill="#fff0d7"/>
+<text x="400" y="155" font-size="23" text-anchor="middle" font-weight="600">仕組みの例：答えは10。最初の予想は6。</text>
+<rect x="32" y="223" width="185" height="115" rx="12" fill="#edf4fb"/>
+<text x="124" y="259" font-size="21" text-anchor="middle">最初の予想</text>
+<text x="124" y="303" font-size="30" text-anchor="middle" font-weight="600">6</text>
+<rect x="307" y="223" width="185" height="115" rx="12" fill="#eaf5f0"/>
+<text x="399" y="259" font-size="22" text-anchor="middle">修正 +2</text>
+<text x="399" y="303" font-size="30" text-anchor="middle" font-weight="600">8</text>
+<rect x="583" y="223" width="185" height="115" rx="12" fill="#eaf5f0"/>
+<text x="675" y="259" font-size="22" text-anchor="middle">修正 +1</text>
+<text x="675" y="303" font-size="30" text-anchor="middle" font-weight="600">9</text>
+<path d="M227,280 L297,280" stroke="#53708d" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+<path d="M502,280 L573,280" stroke="#53708d" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+<text x="124" y="379" font-size="21" text-anchor="middle">ずれは4</text>
+<text x="399" y="379" font-size="21" text-anchor="middle">ずれは2</text>
+<text x="675" y="379" font-size="21" text-anchor="middle">ずれは1</text>
+<rect x="32" y="415" width="736" height="108" rx="12" fill="#edf4fb"/>
+<text x="400" y="455" font-size="22" text-anchor="middle" font-weight="600">learning_rate：一度の修正をどれだけ足すか</text>
+<text x="400" y="493" font-size="22" text-anchor="middle">max_iter：小さな木を足す回数</text>
+<text x="400" y="571" font-size="21" text-anchor="middle">回数や割合は、同じ学習用のCVで比較する。</text>
+<text x="400" y="609" font-size="20" text-anchor="middle">新しい方法が、単純な回帰に必ず勝つわけではない。</text>
+</g>
+</svg>
