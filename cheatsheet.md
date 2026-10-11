@@ -27,6 +27,10 @@
 | PCA / 主成分分析 | 特徴量を組み合わせ、広がりを残せる少ない軸にまとめる方法 |
 | 寄与率 | PCAの各軸に残した、学習用のばらつきの割合。正解率とは別 |
 | CSV | 表を、列の間をカンマで区切って保存したファイル |
+| 学習曲線 | 学習する件数を変え、学習用と検証用の成績を比べる図 |
+| 不均衡な分類 | 種類ごとの件数が大きく違う分類。正解率だけでは読み違えやすい |
+| しきい値 | 予測確率がこの値以上なら陽性と判断する、という境目 |
+| Permutation Importance | 学習済みモデルで1列を入れ替え、成績の悪化を測る重要度 |
 
 ## 基本の流れ
 
@@ -68,6 +72,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.cluster import KMeans
 from sklearn.model_selection import GridSearchCV, KFold
 from sklearn.decomposition import PCA
+from sklearn.model_selection import learning_curve
+from sklearn.inspection import permutation_importance
 ```
 
 ## 教師あり学習
@@ -184,9 +190,14 @@ DummyRegressorの予測は学習用の平均なので、テストでのR2がち�
 | `projection.transform(X_check)` | 決めた尺度とPCAの軸で、新しい例も変換する | [第12章](scripts/ch12_pca.py) |
 | `pd.read_csv(path)` | CSVを表として読み込む | [第13章](scripts/ch13_csv_regression.py) |
 | `neg_mean_absolute_error` | 「大きいほど良い」にそろえるため、MAEにマイナスを付けたCV指標 | [第13章の解答](answers/ch13_answer.py) |
+| `learning_curve(..., train_sizes=[0.2, ..., 1.0])` | CVの各回の学習側から使う割合を変える | [第14章](scripts/ch14_learning_curves.py) |
+| `probabilities >= threshold` | 同じモデルの確率に、判断の境目を当てる | [第15章](scripts/ch15_imbalanced_classification.py) |
+| `permutation_importance(..., n_repeats=10)` | 1列を入れ替え、成績を測る操作を列ごとに10回行う | [第16章](scripts/ch16_feature_importance.py) |
 
 MAEとして説明するなら、最後の指標の符号を戻します。たとえばCVの平均が-0.8ならMAEは0.8です。
 単位は答えの単位と同じで、第13章では万円です。
+第16章の重要度では、`-MAE`の採点値の差を取るので、返る値は「入れ替え後MAE − 元のMAE」です。
+これはMAEの増加（万円）なので、さらにマイナスを付けません。
 
 ## もう少し詳しく知りたいとき
 

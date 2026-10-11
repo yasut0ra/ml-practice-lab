@@ -21,6 +21,9 @@ CHAPTERS = [
     "ch11_parameter_search.py",
     "ch12_pca.py",
     "ch13_csv_regression.py",
+    "ch14_learning_curves.py",
+    "ch15_imbalanced_classification.py",
+    "ch16_feature_importance.py",
 ]
 
 

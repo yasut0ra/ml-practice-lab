@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="650" viewBox="0 0 800 650" role="img" aria-labelledby="title desc">
+<title id="title">95%正解しても、不良品を見つけたとは限らない</title>
+<desc id="desc">正常95個、不良品5個の100個を例にする。全て正常と答えると正解率95%だが、不良品を見つけるrecallは0%。サンプルでは学習用562件でモデルを学び、検証用188件でしきい値を選び、最後に別の250件で確認する。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#53708d"/></marker></defs>
+<rect width="800" height="650" rx="18" fill="white"/>
+<g font-family="'Hiragino Sans', 'Noto Sans JP', Meiryo, sans-serif" fill="#19324d">
+<text x="32" y="46" font-size="26" text-anchor="start" font-weight="600">95%正解でも、不良品を見つけたとは限らない</text>
+<text x="32" y="81" font-size="19" text-anchor="start">まずは100個で考える（青い丸＝正常、橙の四角＝不良）</text>
+<circle cx="48" cy="115" r="7" fill="#2765a1"/>
+<circle cx="70" cy="115" r="7" fill="#2765a1"/>
+<circle cx="92" cy="115" r="7" fill="#2765a1"/>
+<circle cx="114" cy="115" r="7" fill="#2765a1"/>
+<circle cx="136" cy="115" r="7" fill="#2765a1"/>
+<circle cx="158" cy="115" r="7" fill="#2765a1"/>
+<circle cx="180" cy="115" r="7" fill="#2765a1"/>
+<circle cx="202" cy="115" r="7" fill="#2765a1"/>
+<circle cx="224" cy="115" r="7" fill="#2765a1"/>
+<circle cx="246" cy="115" r="7" fill="#2765a1"/>
+<circle cx="268" cy="115" r="7" fill="#2765a1"/>
+<circle cx="290" cy="115" r="7" fill="#2765a1"/>
+<circle cx="312" cy="115" r="7" fill="#2765a1"/>
+<circle cx="334" cy="115" r="7" fill="#2765a1"/>
+<circle cx="356" cy="115" r="7" fill="#2765a1"/>
+<circle cx="378" cy="115" r="7" fill="#2765a1"/>
+<circle cx="400" cy="115" r="7" fill="#2765a1"/>
+<circle cx="422" cy="115" r="7" fill="#2765a1"/>
+<circle cx="444" cy="115" r="7" fill="#2765a1"/>
+<circle cx="466" cy="115" r="7" fill="#2765a1"/>
+<circle cx="48" cy="142" r="7" fill="#2765a1"/>
+<circle cx="70" cy="142" r="7" fill="#2765a1"/>
+<circle cx="92" cy="142" r="7" fill="#2765a1"/>
+<circle cx="114" cy="142" r="7" fill="#2765a1"/>
+<circle cx="136" cy="142" r="7" fill="#2765a1"/>
+<circle cx="158" cy="142" r="7" fill="#2765a1"/>
+<circle cx="180" cy="142" r="7" fill="#2765a1"/>
+<circle cx="202" cy="142" r="7" fill="#2765a1"/>
+<circle cx="224" cy="142" r="7" fill="#2765a1"/>
+<circle cx="246" cy="142" r="7" fill="#2765a1"/>
+<circle cx="268" cy="142" r="7" fill="#2765a1"/>
+<circle cx="290" cy="142" r="7" fill="#2765a1"/>
+<circle cx="312" cy="142" r="7" fill="#2765a1"/>
+<circle cx="334" cy="142" r="7" fill="#2765a1"/>
+<circle cx="356" cy="142" r="7" fill="#2765a1"/>
+<circle cx="378" cy="142" r="7" fill="#2765a1"/>
+<circle cx="400" cy="142" r="7" fill="#2765a1"/>
+<circle cx="422" cy="142" r="7" fill="#2765a1"/>
+<circle cx="444" cy="142" r="7" fill="#2765a1"/>
+<circle cx="466" cy="142" r="7" fill="#2765a1"/>
+<circle cx="48" cy="169" r="7" fill="#2765a1"/>
+<circle cx="70" cy="169" r="7" fill="#2765a1"/>
+<circle cx="92" cy="169" r="7" fill="#2765a1"/>
+<circle cx="114" cy="169" r="7" fill="#2765a1"/>
+<circle cx="136" cy="169" r="7" fill="#2765a1"/>
+<circle cx="158" cy="169" r="7" fill="#2765a1"/>
+<circle cx="180" cy="169" r="7" fill="#2765a1"/>
+<circle cx="202" cy="169" r="7" fill="#2765a1"/>
+<circle cx="224" cy="169" r="7" fill="#2765a1"/>
+<circle cx="246" cy="169" r="7" fill="#2765a1"/>
+<circle cx="268" cy="169" r="7" fill="#2765a1"/>
+<circle cx="290" cy="169" r="7" fill="#2765a1"/>
+<circle cx="312" cy="169" r="7" fill="#2765a1"/>
+<circle cx="334" cy="169" r="7" fill="#2765a1"/>
+<circle cx="356" cy="169" r="7" fill="#2765a1"/>
+<circle cx="378" cy="169" r="7" fill="#2765a1"/>
+<circle cx="400" cy="169" r="7" fill="#2765a1"/>
+<circle cx="422" cy="169" r="7" fill="#2765a1"/>
+<circle cx="444" cy="169" r="7" fill="#2765a1"/>
+<circle cx="466" cy="169" r="7" fill="#2765a1"/>
+<circle cx="48" cy="196" r="7" fill="#2765a1"/>
+<circle cx="70" cy="196" r="7" fill="#2765a1"/>
+<circle cx="92" cy="196" r="7" fill="#2765a1"/>
+<circle cx="114" cy="196" r="7" fill="#2765a1"/>
+<circle cx="136" cy="196" r="7" fill="#2765a1"/>
+<circle cx="158" cy="196" r="7" fill="#2765a1"/>
+<circle cx="180" cy="196" r="7" fill="#2765a1"/>
+<circle cx="202" cy="196" r="7" fill="#2765a1"/>
+<circle cx="224" cy="196" r="7" fill="#2765a1"/>
+<circle cx="246" cy="196" r="7" fill="#2765a1"/>
+<circle cx="268" cy="196" r="7" fill="#2765a1"/>
+<circle cx="290" cy="196" r="7" fill="#2765a1"/>
+<circle cx="312" cy="196" r="7" fill="#2765a1"/>
+<circle cx="334" cy="196" r="7" fill="#2765a1"/>
+<circle cx="356" cy="196" r="7" fill="#2765a1"/>
+<circle cx="378" cy="196" r="7" fill="#2765a1"/>
+<circle cx="400" cy="196" r="7" fill="#2765a1"/>
+<circle cx="422" cy="196" r="7" fill="#2765a1"/>
+<circle cx="444" cy="196" r="7" fill="#2765a1"/>
+<circle cx="466" cy="196" r="7" fill="#2765a1"/>
+<circle cx="48" cy="223" r="7" fill="#2765a1"/>
+<circle cx="70" cy="223" r="7" fill="#2765a1"/>
+<circle cx="92" cy="223" r="7" fill="#2765a1"/>
+<circle cx="114" cy="223" r="7" fill="#2765a1"/>
+<circle cx="136" cy="223" r="7" fill="#2765a1"/>
+<circle cx="158" cy="223" r="7" fill="#2765a1"/>
+<circle cx="180" cy="223" r="7" fill="#2765a1"/>
+<circle cx="202" cy="223" r="7" fill="#2765a1"/>
+<circle cx="224" cy="223" r="7" fill="#2765a1"/>
+<circle cx="246" cy="223" r="7" fill="#2765a1"/>
+<circle cx="268" cy="223" r="7" fill="#2765a1"/>
+<circle cx="290" cy="223" r="7" fill="#2765a1"/>
+<circle cx="312" cy="223" r="7" fill="#2765a1"/>
+<circle cx="334" cy="223" r="7" fill="#2765a1"/>
+<circle cx="356" cy="223" r="7" fill="#2765a1"/>
+<rect x="371" y="216" width="14" height="14" rx="2" fill="#b06a20"/>
+<rect x="393" y="216" width="14" height="14" rx="2" fill="#b06a20"/>
+<rect x="415" y="216" width="14" height="14" rx="2" fill="#b06a20"/>
+<rect x="437" y="216" width="14" height="14" rx="2" fill="#b06a20"/>
+<rect x="459" y="216" width="14" height="14" rx="2" fill="#b06a20"/>
+<rect x="520" y="101" width="248" height="140" rx="12" fill="#edf4fb"/>
+<text x="644" y="140" font-size="22" text-anchor="middle" font-weight="600">正常：95個</text>
+<text x="644" y="178" font-size="22" text-anchor="middle" font-weight="600">不良：5個</text>
+<text x="644" y="216" font-size="19" text-anchor="middle">見つけたいのは不良品</text>
+<rect x="32" y="266" width="736" height="106" rx="12" fill="#fff6e9"/>
+<text x="55" y="304" font-size="23" text-anchor="start" font-weight="600">全部「正常」と答える → 正解率95%</text>
+<text x="55" y="344" font-size="21" text-anchor="start">不良品5個のうち見つけたのは0個 → recallは0%</text>
+<text x="32" y="408" font-size="22" text-anchor="start" font-weight="600">しきい値を選ぶときも、データの役割を分ける</text>
+<rect x="32" y="431" width="224" height="105" rx="12" fill="#eaf5f0"/>
+<text x="144" y="471" font-size="21" text-anchor="middle" font-weight="600">学習用562件</text>
+<text x="144" y="511" font-size="20" text-anchor="middle">モデルを学ぶ</text>
+<rect x="288" y="431" width="224" height="105" rx="12" fill="#eaf5f0"/>
+<text x="400" y="471" font-size="21" text-anchor="middle" font-weight="600">検証用188件</text>
+<text x="400" y="511" font-size="20" text-anchor="middle">しきい値を選ぶ</text>
+<rect x="544" y="431" width="224" height="105" rx="12" fill="#fff6e9"/>
+<text x="656" y="471" font-size="21" text-anchor="middle" font-weight="600">最終テスト250件</text>
+<text x="656" y="511" font-size="20" text-anchor="middle">最後に確認</text>
+<path d="M258,481 H279" stroke="#53708d" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+<path d="M514,481 H535" stroke="#53708d" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+<text x="400" y="581" font-size="20" text-anchor="middle">検証用では同じ予測確率に、別のしきい値を当てる</text>
+<text x="400" y="620" font-size="20" text-anchor="middle">しきい値を決めた後、同じモデルで最終テストを確かめる</text>
+</g>
+</svg>
